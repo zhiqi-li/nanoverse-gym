@@ -1,0 +1,27 @@
+{
+  "cases": [
+    {
+      "case_id": "robodojo-default",
+      "environment": "robodojo",
+      "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "native_seconds": 1200,
+      "model_calls": 20,
+      "cleanup_seconds": 60,
+      "runtime_env": {
+        "PATH": "/opt/nvgym/deployment:/usr/local/bin:/usr/bin:/bin",
+        "HOME": "/tmp",
+        "NANOVERSE_NODE_ROOT": "/opt/nvgym/code/nanoverse",
+        "NANOVERSE_TTC_MANIFEST": "/opt/nvgym/deployment/ttc-manifest.json",
+        "NANOVERSE_GUEST_PROGRAMS": "/opt/nvgym/deployment/programs.json",
+        "OMNI_KIT_ALLOW_ROOT": "1",
+        "OMNI_KIT_ACCEPT_EULA": "YES",
+        "ACCEPT_EULA": "Y",
+        "PRIVACY_CONSENT": "Y",
+        "NVIDIA_DRIVER_CAPABILITIES": "all",
+        "LD_LIBRARY_PATH": "/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
+      },
+      "policy_path": "/opt/nvgym/code/ember_bridge/examples/robodojo/task-policies/general_pickup",
+      "config_path": "/accepted-derived-input/config.json"
+    }
+  ]
+}

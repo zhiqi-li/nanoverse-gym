@@ -1,0 +1,1 @@
+These source checks run in the packaged common runtime with pytest 9.1.1, Ruff 0.17.1 and huggingface-hub 0.36.2. They cover preparation, pinned asset transport and launcher arguments. They do not replace GPU simulation, real-model evaluation or Docker-host lifecycle acceptance.

@@ -1,0 +1,64 @@
+{
+  "integration": "robodojo",
+  "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+  "robodojo": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/RoboDojo",
+  "assets": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/RoboDojo",
+  "home_robot_config": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/RoboDojo/Assets/Robots/x5/curobo_tmp.yml",
+  "table_height": 0.765,
+  "motion_scene": {},
+  "state_access": "none",
+  "task": "general_pickup",
+  "layout_id": 0,
+  "eval_seed": 0,
+  "step_limit": 400,
+  "policy_version": "v000",
+  "worker_image": "sha256:replace-with-built-worker-image-id",
+  "observation_mode": "rgb",
+  "harness_command": [
+    "/opt/nvgym/deployment/node",
+    "/opt/nvgym/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/opt/nvgym/deployment/codex"
+  ],
+  "provider_auth": "api_key",
+  "model": {
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh",
+    "base_url": "http://127.0.0.1:9/v1"
+  },
+  "episode_seconds": 1200,
+  "decision_limit": 20,
+  "request_timeout_seconds": 180,
+  "log_mode": "inline",
+  "context_mode": "standard",
+  "policies": [],
+  "roles": {
+    "actor": {
+      "tools": [],
+      "skills": [],
+      "harness_options": {
+        "tools": "native"
+      }
+    }
+  },
+  "sdk": {
+    "execution": "ttc",
+    "python": "/opt/nvgym/sdk/bin/python",
+    "call_cap": 20,
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    }
+  },
+  "native_rpc": "unix_socket",
+  "kit_root": "/output/kit",
+  "simulator_command": [
+    "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+    "-u",
+    "-m",
+    "robodojo_env.native.server",
+    "--kit_args",
+    "--/app/updateOrder/checkForHydraRenderComplete=1000 --/app/renderer/waitIdle=true --/app/hydraEngine/waitIdle=true"
+  ]
+}

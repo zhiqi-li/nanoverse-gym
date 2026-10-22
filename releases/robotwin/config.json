@@ -1,0 +1,58 @@
+{
+  "context_mode": "standard",
+  "control": "direct",
+  "decision_limit": 40,
+  "episode_seconds": 1200,
+  "harness_command": [
+    "/tmp/nanoverse-gym-sdk/public/deployment/node",
+    "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/tmp/nanoverse-gym-sdk/public/deployment/codex"
+  ],
+  "integration": "robotwin",
+  "log_mode": "inline",
+  "model": {
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh",
+    "base_url": "http://127.0.0.1:9/v1"
+  },
+  "native": {
+    "cameras": [
+      "head_camera",
+      "left_camera",
+      "right_camera"
+    ],
+    "observation_mode": "rgb",
+    "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robotwin/venv/bin/python",
+    "root": "/osmo/run/workspace/nanoverse/8978eda5db7/robotwin/RoboTwin",
+    "seed": 100000,
+    "startup_seconds": 300,
+    "state_access": "none",
+    "task": "stack_blocks_two"
+  },
+  "provider_auth": "api_key",
+  "request_timeout_seconds": 900,
+  "roles": {
+    "actor": {
+      "harness_options": {
+        "tools": "native"
+      },
+      "limits": {
+        "model_calls": 40,
+        "seconds": 1200
+      },
+      "skills": [],
+      "tools": []
+    }
+  },
+  "sdk": {
+    "call_cap": 40,
+    "execution": "ttc",
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    },
+    "python": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python"
+  }
+}

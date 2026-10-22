@@ -1,0 +1,285 @@
+{
+  "schema": "nvgym.public-source-candidate.v1",
+  "status": "unpublished; runtime qualification pending",
+  "files": {
+    ".gitignore": {
+      "sha256": "2bee06e2d2fde147e496475e21d6b5f1e361113a2b8c2a5899ae3f97bfe7cfe4",
+      "bytes": 108
+    },
+    "LICENSE": {
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+      "bytes": 11357
+    },
+    "README.md": {
+      "sha256": "719637ae52efeb811bf1172f52d2accbb601b39cf0fa21a1abf0935546efb759",
+      "bytes": 3474
+    },
+    "docs/portable.md": {
+      "sha256": "c36f6303ffe7bfc9f62507372944c30f2fa25957ac1e60ea47e7238096d42595",
+      "bytes": 33268
+    },
+    "environment_servers/nanoverse_sdk/__init__.py": {
+      "sha256": "001fb25269554c173f7947784d5f3e002da867a457b52d5f6077a39f366c9e30",
+      "bytes": 189
+    },
+    "environment_servers/nanoverse_sdk/app.py": {
+      "sha256": "2982f49b2e5fd9a63123a00d0868868e6fbd05d3dc5a01e651b2164580f58ad9",
+      "bytes": 12320
+    },
+    "environment_servers/nanoverse_sdk/native.py": {
+      "sha256": "0502e54cccf41322ad772775b848825aa340d7b4d4784359a1783694f02ebe01",
+      "bytes": 26141
+    },
+    "environment_servers/nanoverse_sdk/prepare.py": {
+      "sha256": "d497618e130afab8349e5cca4207c85b7fecf1349c7ded48de00b58d4a88aa70",
+      "bytes": 1937
+    },
+    "environment_servers/nanoverse_sdk/requirements.txt": {
+      "sha256": "63bd35ff7758d2e268d1801c5268471c96a74179b0dac53a1b6b16f3385ac33c",
+      "bytes": 95
+    },
+    "environment_servers/nanoverse_sdk/stop.py": {
+      "sha256": "5365d0ace023b6ae2d61dadf1e48d10004d60739061654c2c64a21b2b03d03dc",
+      "bytes": 3388
+    },
+    "environments/nanoverse_sdk/config.yaml": {
+      "sha256": "23a8b7c7cd99666f0c462e4cda219be06dd63f8a8b0055cd7291a88239fc2572",
+      "bytes": 642
+    },
+    "model.env.example": {
+      "sha256": "9c84c29b85f32774b756a685d80a763e9aa6b29fc96e54f30f1c9f90ada38fb2",
+      "bytes": 84
+    },
+    "nvgym": {
+      "sha256": "361268fb6dcfaa9dd3aabfb8e5d727e179ac019ebc593a429510fac243f61267",
+      "bytes": 7365
+    },
+    "portable/Dockerfile.common": {
+      "sha256": "84ad97c2f7b8a5ce9d042feeefa1af6b60f6f7fa8a501cd2c34fb7cc270b14d8",
+      "bytes": 2543
+    },
+    "portable/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "portable/behavior_data.py": {
+      "sha256": "f31f95592819cf25136db33d63399e6280c18c9b9cc3c699dba53e0a85761a37",
+      "bytes": 4174
+    },
+    "portable/build_context.py": {
+      "sha256": "3f75b243ea7ce7756c94ae3684581a84fb567f4c21cc090ec78baf18b58e0839",
+      "bytes": 13365
+    },
+    "portable/images.tsv": {
+      "sha256": "d689ac60b423c35a80815d8a860bcdab6438783018b44cf64b6352dd1b480286",
+      "bytes": 123
+    },
+    "portable/native_admission.py": {
+      "sha256": "3552903a7c24f6dbf8766194210a9b4c2df4d42c95f82dbee09adc29cb3dcb65",
+      "bytes": 20171
+    },
+    "portable/native_host.py": {
+      "sha256": "cb8c13b8f02060d135647c8195fa4edeccd6a5ddaf83a15915bfcef5789da447",
+      "bytes": 27116
+    },
+    "portable/native_inventory.py": {
+      "sha256": "5d3b513a026110db275cf79814976a44941e15ba8fdd39ffcf2a2eb37c263744",
+      "bytes": 1595
+    },
+    "portable/official_install.py": {
+      "sha256": "068414220acebfeaa27c4a48af6b894233315f38a26c8e546d611d2167eb273e",
+      "bytes": 13280
+    },
+    "portable/prepare.sh": {
+      "sha256": "ac9cad06a5e88e1fd53ae7258b9e67d20cb5cc30126162be7cdb4d54fb94f2dd",
+      "bytes": 4837
+    },
+    "portable/prepare_runtime.py": {
+      "sha256": "a153169f75a472c45c43d5841e6a9cce3bbbb128e3abe9f7391d800b92b19cf9",
+      "bytes": 8732
+    },
+    "portable/release.py": {
+      "sha256": "e83174d67f1082a95fb56f4c7059627e6f22f278b56773585eb2a4f09a7189f4",
+      "bytes": 10588
+    },
+    "portable/robodojo_assets.py": {
+      "sha256": "ebd4017195387ff3ac75dea8fad4fede1be0bc5f594bbabfd73552da3673632d",
+      "bytes": 12065
+    },
+    "portable/runtime.py": {
+      "sha256": "a15a797000862ad5c8e4cb17557e82615b1ab118948b4a70cac1dd266d08a499",
+      "bytes": 10151
+    },
+    "portable/sdk_admission.py": {
+      "sha256": "db75b4a3f4eb2a94f99225b9b22d74ac456d5e5d781b428fec4a76445ed4626e",
+      "bytes": 16551
+    },
+    "portable/software_prepare.py": {
+      "sha256": "851151b5d80691d8b7235403f7992d0c0c3a2cb862816c8dbc4ceadb3a83871c",
+      "bytes": 11817
+    },
+    "pyproject.toml": {
+      "sha256": "df739560fda2f3a52fe0c5d7934ad176f7df19e8fe13aa0ee4e9bc65c1a350e4",
+      "bytes": 214
+    },
+    "releases/behavior1k/config.json": {
+      "sha256": "86c0540f96a2d47911ec49292183eb56f9649c79eda7f9e53e0e277a7208864b",
+      "bytes": 1425
+    },
+    "releases/behavior1k/registry.json": {
+      "sha256": "79cff4051ead741b19f72144714351675479d8e0f57a1d7b18ecdd6f4e78967d",
+      "bytes": 960
+    },
+    "releases/behavior1k/release.json": {
+      "sha256": "299557216ad3adfa615bb61227d5b52ab9cd006fe992b19c91ef5ffec435e33e",
+      "bytes": 5147
+    },
+    "releases/exemplar/config.json": {
+      "sha256": "b8c161706c19b71198732b8c5e9bd5b1a1131040e54f458afa148acfbffd7e3d",
+      "bytes": 937
+    },
+    "releases/exemplar/registry.json": {
+      "sha256": "7f184f7fc5807a058984976bf195584e2bf11202565fda964bcd64413971fa77",
+      "bytes": 1205
+    },
+    "releases/exemplar/release.json": {
+      "sha256": "c63e282c5a63b4747d9fad858f56f53c24e7242a14b924dacd74af955c6f225e",
+      "bytes": 3828
+    },
+    "releases/libero/config.json": {
+      "sha256": "b45800a21905f39d9059108f6cc8c4149213e5e0ce583b58fa0ea7b286456eef",
+      "bytes": 1353
+    },
+    "releases/libero/registry.json": {
+      "sha256": "8061ae7907a1610dd1d50a0acbd0c9ec96bbe2c9f8379face64f2b4cf31455b1",
+      "bytes": 927
+    },
+    "releases/libero/release.json": {
+      "sha256": "bff1cd9f95e6428c184c8c3298136203acbe11b5a55848c85aa4de3395d85859",
+      "bytes": 3800
+    },
+    "releases/molmospaces/config.json": {
+      "sha256": "613e384d6bb3f92519e5b168917a41d3e74b9d431569702d61a657797d0c2357",
+      "bytes": 1492
+    },
+    "releases/molmospaces/registry.json": {
+      "sha256": "1b1910de0d75da3d95aca15162c40e2f84091fe1d2c51f003b255b183e7898f4",
+      "bytes": 947
+    },
+    "releases/molmospaces/release.json": {
+      "sha256": "d0f268c15539dd68c92cf988bf435aa4920aa96a142dba2894252abfcd21a5cf",
+      "bytes": 3830
+    },
+    "releases/robocasa365/config.json": {
+      "sha256": "b277506d74bec2ed70c95f0aabbcc9b3ea40bb9fefe7b1bb5a36475a65e7dba4",
+      "bytes": 1295
+    },
+    "releases/robocasa365/registry.json": {
+      "sha256": "500902759ea4537712acf5683d7cde52442eacbe1b2d881c10c78628c58cd9a7",
+      "bytes": 947
+    },
+    "releases/robocasa365/release.json": {
+      "sha256": "0fb58766df4ecd0b656efde1f15814831be858669877ac756714e3bde962e5d3",
+      "bytes": 3830
+    },
+    "releases/robodojo/config.json": {
+      "sha256": "8c964e19c9b919aa12ee233311bdb05fa787e9af820417023046fb80729b0efd",
+      "bytes": 1853
+    },
+    "releases/robodojo/registry.json": {
+      "sha256": "c7a939ac81e6c7e8ef067a82b75c81a7ad9fb221aba4c59185897dbb12677ff7",
+      "bytes": 1047
+    },
+    "releases/robodojo/release.json": {
+      "sha256": "87c4339072b93d3420f062c373069b3070e45880012beb72df2db786f157fae3",
+      "bytes": 2178
+    },
+    "releases/roboforge/config.json": {
+      "sha256": "7547bdf0fa7397382e7bf86c896fc7fd675405d425d7eec4667ac0e5528b677e",
+      "bytes": 1931
+    },
+    "releases/roboforge/registry.json": {
+      "sha256": "dd4b66a71cf1a885ef35d24cd9e8bb471cb722b6451c794b3026abe74e9e06d7",
+      "bytes": 2243
+    },
+    "releases/roboforge/release.json": {
+      "sha256": "027db4e51f7fac45018d547756284d7cd13b968ee5e0ea9d2b7681fa86f80665",
+      "bytes": 5586
+    },
+    "releases/roboforge/task-package.tar.gz": {
+      "sha256": "db06d96dd31cc34972a9129c60f0c1dcc632ad7f4b602972b80c8bf5a0e4f26b",
+      "bytes": 259048
+    },
+    "releases/robolab/config.json": {
+      "sha256": "6d90d4b8337ed95ed639d76be4163c4a7e9585751e04537d63457fa71348c8b9",
+      "bytes": 1380
+    },
+    "releases/robolab/registry.json": {
+      "sha256": "03d434bb2d133693308e8b7560422b90d2b1aa9bd54c8fa693da1e62db9674e5",
+      "bytes": 1113
+    },
+    "releases/robolab/release.json": {
+      "sha256": "738db31bf21322c192f53ffc396322058a2e879388d1d7c3b6c2c88c408f84d5",
+      "bytes": 3998
+    },
+    "releases/robotwin/config.json": {
+      "sha256": "75197461bd7f81e6599581484dcee875e24cfca29b66388b7afc093e67802ceb",
+      "bytes": 1441
+    },
+    "releases/robotwin/registry.json": {
+      "sha256": "23f6153ca930838641fab096cc284d064c916d58321060529936de9906894fdc",
+      "bytes": 953
+    },
+    "releases/robotwin/release.json": {
+      "sha256": "a7e24074bfe85a6bf3215397894e0cd2f2a4b035014b3b810bf909f1621735fd",
+      "bytes": 3854
+    },
+    "responses_api_models/nanoverse_sdk_openai/__init__.py": {
+      "sha256": "39b67a3543de12fbe919327958818a53222b223688ef8ece33a12bc1e46d1f14",
+      "bytes": 137
+    },
+    "responses_api_models/nanoverse_sdk_openai/app.py": {
+      "sha256": "c7aab229305139806e60aae4519f6da115f72f0efe669ad364872d1c614e4995",
+      "bytes": 5011
+    },
+    "responses_api_models/nanoverse_sdk_openai/requirements.txt": {
+      "sha256": "63bd35ff7758d2e268d1801c5268471c96a74179b0dac53a1b6b16f3385ac33c",
+      "bytes": 95
+    },
+    "scripts/robodojo_sdk_smoke.py": {
+      "sha256": "d8a6b6db7fe2fe01d9ebbfe68d1d10f39966b15992d2a77fd59a283d7dd2ff7b",
+      "bytes": 17864
+    },
+    "scripts/sdk_smoke.py": {
+      "sha256": "31c8872637a11f5d58cdd99f1cabd4a8763aa304a6715e12e06ea3b5ae73be42",
+      "bytes": 7745
+    },
+    "tests/README.md": {
+      "sha256": "88eb15f884faa4574ee56c56682998faf63fe8ef4b5acd28271b8e115c5247a1",
+      "bytes": 280
+    },
+    "tests/test_official_install.py": {
+      "sha256": "7295e24d566f1deb2bd689416b0885da4a7ae78ab3cdadb70aff97ec49efa8ac",
+      "bytes": 7019
+    },
+    "tests/test_portable_launcher.py": {
+      "sha256": "41947908072ab530c0cd8d8cea0793b37c5d0df8b83bbe2d3c1b67d9b3ed0763",
+      "bytes": 5053
+    },
+    "tests/test_prepare_runtime.py": {
+      "sha256": "1a9e592c112037e888fc17a9d557c62ecc94b97b1a524a11d9db2b421075052f",
+      "bytes": 3713
+    },
+    "tests/test_robodojo_assets.py": {
+      "sha256": "45be7089cc7353107d7489b7f77e1e37bafef231de04ba4ef3d1fbc07937e3ba",
+      "bytes": 8845
+    }
+  },
+  "matched_frozen_v25_files": 59,
+  "common_package_sha256": "fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041",
+  "qualification": {
+    "source_cases_covered": 48,
+    "real_model_v25": "pending",
+    "external_docker_host": "pending"
+  }
+}

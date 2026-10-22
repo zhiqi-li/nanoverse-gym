@@ -1,0 +1,25 @@
+{
+  "cases": [
+    {
+      "allocation_id": "robotwin",
+      "case_id": "robotwin-sdk-direct",
+      "cleanup_seconds": 60,
+      "config_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robotwin-3b08b6a1/operator-config-direct.json",
+      "environment": "robotwin",
+      "evidence": {
+        "sdk_summary_path": "native/seed-100000/sdk/summary.json"
+      },
+      "model_calls": 40,
+      "native_seconds": 1200,
+      "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robotwin/venv/bin/python",
+      "runtime_env": {
+        "HOME": "/root",
+        "NANOVERSE_GUEST_PROGRAMS": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+        "NANOVERSE_NODE_ROOT": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+        "NANOVERSE_TTC_MANIFEST": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+        "PATH": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  ]
+}

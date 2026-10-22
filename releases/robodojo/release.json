@@ -1,0 +1,53 @@
+{
+  "schema": "nvgym.release-input.v1",
+  "environment": "robodojo",
+  "episode_seconds": 1800,
+  "case_id": "robodojo-default",
+  "config_source": {
+    "path": "config.json",
+    "sha256": "8c964e19c9b919aa12ee233311bdb05fa787e9af820417023046fb80729b0efd"
+  },
+  "registry_source": {
+    "path": "registry.json",
+    "sha256": "c7a939ac81e6c7e8ef067a82b75c81a7ad9fb221aba4c59185897dbb12677ff7"
+  },
+  "bindings": [
+    {
+      "document": "case",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/simulator_command/0",
+      "expected": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    }
+  ],
+  "native": {
+    "kind": "expanded_seed",
+    "image": "nvcr.io/nvidian/zhiqil-envsdk-init@sha256:a3dcfcf0e71ace04234abb1791d7abea5621eea70f04b4a1d6a35a651f10519d",
+    "descriptor_path": "/opt/envsdk/native/seed.json",
+    "descriptor_sha256": "cab5993cfc357954f530826e3a7a2793f7a42f19fe287fefcc1ca5ca01a67a4d",
+    "payload_path": "/opt/envsdk/native/payload",
+    "prefix": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo",
+    "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python"
+  },
+  "artifacts": [],
+  "qualification": {
+    "kind": "derived from accepted runtime metadata",
+    "source": "results/sdk-portable-l40-20261022/qualification/owner-fixed-runtime.json",
+    "source_sha256": "408a2a57d55984cb2ce56106446d7688035413b1d02c08231506c9729584290b",
+    "native_pair": {
+      "commit": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0"
+    },
+    "note": "Config and registry bytes are a derived release input. Their hashes do not claim original historical registry identity. Final image build and qualification remain required."
+  }
+}

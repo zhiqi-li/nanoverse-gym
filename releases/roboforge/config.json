@@ -1,0 +1,62 @@
+{
+  "assets": "/tmp/nanoverse-gym-sdk/public/simulator-root/data",
+  "context_mode": "standard",
+  "decision_limit": 40,
+  "episode_seconds": 1200,
+  "eval_seed": 0,
+  "harness_command": [
+    "/tmp/nanoverse-gym-sdk/public/deployment/node",
+    "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/tmp/nanoverse-gym-sdk/public/deployment/codex"
+  ],
+  "home_robot_config": "/tmp/nanoverse-gym-sdk/public/simulator-root/data/Assets/Robots/x5/curobo_tmp.yml",
+  "integration": "roboforge",
+  "kit_root": "/mnt/lfs/home/zhiqil/nvgym-recheck-8832c3fc/rf-final-kit",
+  "layout_id": 0,
+  "log_mode": "inline",
+  "model": {
+    "base_url": "http://127.0.0.1:9/v1",
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh"
+  },
+  "motion_scene": {},
+  "native_rpc": "unix_socket",
+  "observation_mode": "rgb",
+  "policies": [],
+  "policy_version": "roboforge-sdk-v12",
+  "provider_auth": "api_key",
+  "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+  "request_timeout_seconds": 900,
+  "robodojo": "/tmp/nanoverse-gym-sdk/public/simulator-root/RoboDojo",
+  "roles": {
+    "actor": {
+      "harness_options": {
+        "tools": "native"
+      },
+      "limits": {
+        "model_calls": 40,
+        "seconds": 1200
+      },
+      "skills": [],
+      "tools": []
+    }
+  },
+  "sdk": {
+    "call_cap": 40,
+    "execution": "ttc",
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    },
+    "python": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python"
+  },
+  "state_access": "none",
+  "step_limit": 4500,
+  "table_height": 0.765,
+  "task": "align_blocks",
+  "task_package": "/mnt/lfs/home/zhiqil/nvgym-638659e9/forge/align_blocks.native",
+  "task_package_sha256": "b8f51b7014712e6e2d73bf5405a16aea47af7b68073a275d57d5d908bb535818",
+  "worker_image": "sha256:replace-with-built-worker-image-id"
+}

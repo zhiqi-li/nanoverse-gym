@@ -1,0 +1,56 @@
+{
+  "context_mode": "standard",
+  "control": [
+    "native.ee"
+  ],
+  "decision_limit": 40,
+  "episode_seconds": 1200,
+  "harness_command": [
+    "/tmp/nanoverse-gym-sdk/public/deployment/node",
+    "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/tmp/nanoverse-gym-sdk/public/deployment/codex"
+  ],
+  "integration": "robolab",
+  "log_mode": "inline",
+  "model": {
+    "base_url": "http://127.0.0.1:9/v1",
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh"
+  },
+  "native": {
+    "device": "cuda:0",
+    "image_recording": "on_demand",
+    "python": "/osmo/run/workspace/envsdk/native/robolab-0.2.1/native-venv/bin/python",
+    "root": "/osmo/run/workspace/envsdk/native/robolab-0.2.1/RoboLab",
+    "seed": 0,
+    "startup_seconds": 1200,
+    "task": "BlocksInBinTask"
+  },
+  "policies": [],
+  "provider_auth": "api_key",
+  "request_timeout_seconds": 900,
+  "roles": {
+    "actor": {
+      "harness_options": {
+        "tools": "native"
+      },
+      "limits": {
+        "model_calls": 40,
+        "seconds": 1200
+      },
+      "skills": [],
+      "tools": []
+    }
+  },
+  "sdk": {
+    "call_cap": 40,
+    "execution": "ttc",
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    },
+    "python": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python"
+  }
+}

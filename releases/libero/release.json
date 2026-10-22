@@ -1,0 +1,101 @@
+{
+  "schema": "nvgym.release-input.v1",
+  "environment": "libero",
+  "episode_seconds": 1800,
+  "case_id": "libero-sdk-next",
+  "config_source": {
+    "path": "config.json",
+    "sha256": "b45800a21905f39d9059108f6cc8c4149213e5e0ce583b58fa0ea7b286456eef"
+  },
+  "registry_source": {
+    "path": "registry.json",
+    "sha256": "8061ae7907a1610dd1d50a0acbd0c9ec96bbe2c9f8379face64f2b4cf31455b1"
+  },
+  "bindings": [
+    {
+      "document": "case",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/envsdk/native/libero/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/native/python",
+      "expected": "/osmo/run/workspace/envsdk/native/libero/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/0",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/node",
+      "destination": "/opt/nvgym/deployment/node"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/1",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+      "destination": "/opt/nvgym/code/ember_bridge/harnesses/codex/main.mts"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/3",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/codex",
+      "destination": "/opt/nvgym/deployment/codex"
+    },
+    {
+      "document": "config",
+      "pointer": "/sdk/python",
+      "expected": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python",
+      "destination": "/opt/nvgym/sdk/bin/python"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/HOME",
+      "expected": "/root",
+      "destination": "/tmp"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_GUEST_PROGRAMS",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+      "destination": "/opt/nvgym/deployment/programs.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_NODE_ROOT",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+      "destination": "/opt/nvgym/code/nanoverse"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_TTC_MANIFEST",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+      "destination": "/opt/nvgym/deployment/ttc-manifest.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/PATH",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+      "destination": "/opt/nvgym/deployment:/usr/local/bin:/usr/bin:/bin"
+    }
+  ],
+  "native": {
+    "kind": "expanded_seed",
+    "image": "nvcr.io/nvidian/zhiqil-envsdk-init@sha256:b752a22a40f2763c80a93d7b350eb2a6197f2966dee29e7744badd1c64441bea",
+    "descriptor_path": "/opt/envsdk/native/seed.json",
+    "descriptor_sha256": "8c80e1c03253f252929328f2d75d197f08f5158685aa17ffe2f5032ce1952e27",
+    "payload_path": "/opt/envsdk/native/payload",
+    "prefix": "/osmo/run/workspace/envsdk/native/libero",
+    "python": "/osmo/run/workspace/envsdk/native/libero/venv/bin/python"
+  },
+  "artifacts": [],
+  "qualification": {
+    "kind": "original accepted registry and configuration bytes; packaged image not yet qualified",
+    "native_pair": {
+      "commit": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0"
+    },
+    "source_registry_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-libero-4e9c6673-sdk2/operator-registry.json",
+    "source_config_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-libero-4e9c6673-sdk2/operator-config.json",
+    "recovery_archive_sha256": "add45d113dc33b55c5781cc39ce33b67322f4ab1bd56028687451e1f27a797ae"
+  }
+}

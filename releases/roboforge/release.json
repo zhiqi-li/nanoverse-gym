@@ -1,0 +1,145 @@
+{
+  "schema": "nvgym.release-input.v1",
+  "environment": "roboforge",
+  "episode_seconds": 1800,
+  "case_id": "rf-final",
+  "config_source": {
+    "path": "config.json",
+    "sha256": "7547bdf0fa7397382e7bf86c896fc7fd675405d425d7eec4667ac0e5528b677e"
+  },
+  "registry_source": {
+    "path": "registry.json",
+    "sha256": "dd4b66a71cf1a885ef35d24cd9e8bb471cb722b6451c794b3026abe74e9e06d7"
+  },
+  "bindings": [
+    {
+      "document": "case",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/assets",
+      "expected": "/tmp/nanoverse-gym-sdk/public/simulator-root/data",
+      "destination": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/RoboDojo"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/0",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/node",
+      "destination": "/opt/nvgym/deployment/node"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/1",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+      "destination": "/opt/nvgym/code/ember_bridge/harnesses/codex/main.mts"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/3",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/codex",
+      "destination": "/opt/nvgym/deployment/codex"
+    },
+    {
+      "document": "config",
+      "pointer": "/home_robot_config",
+      "expected": "/tmp/nanoverse-gym-sdk/public/simulator-root/data/Assets/Robots/x5/curobo_tmp.yml",
+      "destination": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/RoboDojo/Assets/Robots/x5/curobo_tmp.yml"
+    },
+    {
+      "document": "config",
+      "pointer": "/kit_root",
+      "expected": "/mnt/lfs/home/zhiqil/nvgym-recheck-8832c3fc/rf-final-kit",
+      "destination": "/output/kit"
+    },
+    {
+      "document": "config",
+      "pointer": "/robodojo",
+      "expected": "/tmp/nanoverse-gym-sdk/public/simulator-root/RoboDojo",
+      "destination": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/RoboDojo"
+    },
+    {
+      "document": "config",
+      "pointer": "/sdk/python",
+      "expected": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python",
+      "destination": "/opt/nvgym/sdk/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/task_package",
+      "expected": "/mnt/lfs/home/zhiqil/nvgym-638659e9/forge/align_blocks.native",
+      "destination": "/opt/nvgym/tasks/align_blocks.native"
+    },
+    {
+      "document": "case",
+      "pointer": "/policy_path",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/examples/robodojo/task-policies/general_pickup",
+      "destination": "/opt/nvgym/code/ember_bridge/examples/robodojo/task-policies/general_pickup"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/HOME",
+      "expected": "/root",
+      "destination": "/tmp"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_GUEST_PROGRAMS",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+      "destination": "/opt/nvgym/deployment/programs.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_NODE_ROOT",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+      "destination": "/opt/nvgym/code/nanoverse"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_TTC_MANIFEST",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+      "destination": "/opt/nvgym/deployment/ttc-manifest.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/PATH",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+      "destination": "/opt/nvgym/deployment:/usr/local/bin:/usr/bin:/bin"
+    }
+  ],
+  "native": {
+    "kind": "expanded_seed",
+    "image": "nvcr.io/nvidian/zhiqil-envsdk-init@sha256:a3dcfcf0e71ace04234abb1791d7abea5621eea70f04b4a1d6a35a651f10519d",
+    "descriptor_path": "/opt/envsdk/native/seed.json",
+    "descriptor_sha256": "cab5993cfc357954f530826e3a7a2793f7a42f19fe287fefcc1ca5ca01a67a4d",
+    "payload_path": "/opt/envsdk/native/payload",
+    "prefix": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo",
+    "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python"
+  },
+  "artifacts": [
+    {
+      "path": "task-package.tar.gz",
+      "sha256": "db06d96dd31cc34972a9129c60f0c1dcc632ad7f4b602972b80c8bf5a0e4f26b",
+      "archive_root": "align_blocks.native",
+      "destination": "/opt/nvgym/tasks/align_blocks.native",
+      "manifest_sha256": "b8f51b7014712e6e2d73bf5405a16aea47af7b68073a275d57d5d908bb535818"
+    }
+  ],
+  "qualification": {
+    "kind": "original accepted registry and configuration bytes; packaged image not yet qualified",
+    "native_pair": {
+      "commit": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0"
+    },
+    "source_registry_path": "/mnt/lfs/home/zhiqil/nvgym-recheck-8832c3fc/operator-registry.json",
+    "source_config_path": "/mnt/lfs/home/zhiqil/nvgym-recheck-8832c3fc/rf-final-config.json",
+    "recovery_archive_sha256": "add45d113dc33b55c5781cc39ce33b67322f4ab1bd56028687451e1f27a797ae"
+  }
+}

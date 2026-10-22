@@ -1,0 +1,28 @@
+{
+  "cases": [
+    {
+      "case_id": "exemplar-final",
+      "environment": "exemplar",
+      "python": "/osmo/run/workspace/envsdk/native/robolab-0.2.1/native-venv/bin/python",
+      "config_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robolab-459a336c/exemplar-final/config.json",
+      "native_seconds": 600,
+      "model_calls": 20,
+      "cleanup_seconds": 60,
+      "runtime_env": {
+        "PATH": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+        "PYTHONPATH": "/tmp/nanoverse-gym-sdk/public/code/nanoverse:/tmp/nanoverse-gym-sdk/public/code/nanoverse/envs:/tmp/nanoverse-gym-sdk/public/code/ember_bridge/src",
+        "NANOVERSE_NODE_ROOT": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+        "NANOVERSE_TTC_MANIFEST": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+        "NANOVERSE_GUEST_PROGRAMS": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+        "HOME": "/root",
+        "OMNI_KIT_ALLOW_ROOT": "1",
+        "OMNI_KIT_ACCEPT_EULA": "YES",
+        "ACCEPT_EULA": "Y",
+        "PRIVACY_CONSENT": "Y",
+        "NVIDIA_DRIVER_CAPABILITIES": "all",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "allocation_id": "fixture"
+    }
+  ]
+}

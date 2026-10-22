@@ -1,0 +1,130 @@
+{
+  "schema": "nvgym.release-input.v1",
+  "environment": "behavior1k",
+  "episode_seconds": 5400,
+  "case_id": "behavior1k-sdk-compact64k",
+  "config_source": {
+    "path": "config.json",
+    "sha256": "86c0540f96a2d47911ec49292183eb56f9649c79eda7f9e53e0e277a7208864b"
+  },
+  "registry_source": {
+    "path": "registry.json",
+    "sha256": "79cff4051ead741b19f72144714351675479d8e0f57a1d7b18ecdd6f4e78967d"
+  },
+  "bindings": [
+    {
+      "document": "case",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/envsdk/native/behavior1k/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/native/python",
+      "expected": "/osmo/run/workspace/envsdk/native/behavior1k/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/0",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/node",
+      "destination": "/opt/nvgym/deployment/node"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/1",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+      "destination": "/opt/nvgym/code/ember_bridge/harnesses/codex/main.mts"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/3",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/codex",
+      "destination": "/opt/nvgym/deployment/codex"
+    },
+    {
+      "document": "config",
+      "pointer": "/sdk/python",
+      "expected": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python",
+      "destination": "/opt/nvgym/sdk/bin/python"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/HOME",
+      "expected": "/root",
+      "destination": "/tmp"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_GUEST_PROGRAMS",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+      "destination": "/opt/nvgym/deployment/programs.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_NODE_ROOT",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+      "destination": "/opt/nvgym/code/nanoverse"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_TTC_MANIFEST",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+      "destination": "/opt/nvgym/deployment/ttc-manifest.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/PATH",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+      "destination": "/opt/nvgym/deployment:/usr/local/bin:/usr/bin:/bin"
+    },
+    {
+      "document": "config",
+      "pointer": "/native/data",
+      "expected": "/osmo/run/workspace/envsdk/native/behavior1k/datasets",
+      "destination": "/data"
+    },
+    {
+      "document": "config",
+      "pointer": "/native/appdata",
+      "expected": "/mnt/lfs/home/zhiqil/nvgym-sdk-behavior1k-57f11e15/behavior-appdata/slot0",
+      "destination": "/output/behavior-appdata"
+    }
+  ],
+  "native": {
+    "kind": "software_archive",
+    "source_image": "nvcr.io/nvidian/zhiqil-envsdk-init@sha256:4dedc5617b2ab7555f72ecb265fbe4610a05e8e0010df16e030795ea99106d67",
+    "public_base": "nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04@sha256:61f6c08f2b59036cb935e56d1e31a6b64e3ae2c7ddb86d33fa0b044c7917b719",
+    "cache_descriptor": {
+      "path": "/opt/envsdk/input-cache/manifest.json",
+      "sha256": "ab98319c6898e72932a35fcc59a27cefd1e7a2ee7acef4947c08b70bce407dee"
+    },
+    "native_archive": {
+      "sha256": "9754f3607864d9645ee4a316dd9a3969f9e99ed3eb57ba66ca6a616cf3b9c85c",
+      "bytes": 9309093298
+    },
+    "warp_wheel": {
+      "sha256": "a1436f60a1881cd94f787e751a83fc0987626be2d3e2b4e74c64a6947c6d1266",
+      "bytes": 136485344
+    },
+    "preparation": {
+      "path": "../../portable/software_prepare.py",
+      "sha256": "851151b5d80691d8b7235403f7992d0c0c3a2cb862816c8dbc4ceadb3a83871c"
+    },
+    "payload_path": "/opt/envsdk/native/payload",
+    "prefix": "/osmo/run/workspace/envsdk/native/behavior1k",
+    "python": "/osmo/run/workspace/envsdk/native/behavior1k/venv/bin/python"
+  },
+  "artifacts": [],
+  "qualification": {
+    "kind": "original accepted registry and configuration bytes; newly derived software and public image not qualified",
+    "native_pair": {
+      "commit": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0"
+    },
+    "source_registry_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-behavior1k-57f11e15/operator-registry-compact64k.json",
+    "source_config_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-behavior1k-57f11e15/operator-config-compact64k.json",
+    "recovery_archive_sha256": "add45d113dc33b55c5781cc39ce33b67322f4ab1bd56028687451e1f27a797ae",
+    "archive_probe_report_sha256": "14084872a78e856154a28f60a5f629b89b9d16668a009498ddbacfe800756635",
+    "external_data_identity": "source-owned version and layout checks; records user-supplied nonsecret identities; historical extracted hashes unavailable"
+  }
+}

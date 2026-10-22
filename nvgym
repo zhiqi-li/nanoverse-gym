@@ -1,0 +1,164 @@
+#!/bin/sh
+set -eu
+
+root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+usage() {
+    cat <<'EOF'
+Usage: ./nvgym list
+       ./nvgym run ENV --credentials FILE --output DIRECTORY [--data DIRECTORY] [--image IMAGE] [--gpu ID]
+       ./nvgym run robodojo --prepare --accept-isaac-terms --credentials FILE --output DIRECTORY [--common-package FILE] [--assets-cache DIRECTORY]
+
+Runs a packaged SDK environment with Docker. The output directory must be new.
+--image selects a locally prepared release candidate until public images are published.
+EOF
+}
+fail() { printf '%s\n' "$*" >&2; exit 2; }
+[ "$#" -gt 0 ] || { usage; exit 2; }
+action=$1
+shift
+if [ "$action" = list ]; then
+    [ "$#" -eq 0 ] || fail 'list takes no arguments'
+    cat "$root/portable/images.tsv"
+    exit 0
+fi
+[ "$action" = run ] || { usage; exit 2; }
+[ "$#" -gt 0 ] || fail 'Select an environment'
+environment=$1
+shift
+row=$(awk -F '\t' -v selected="$environment" 'NR > 1 && $1 == selected {print; found=1} END {if (!found) exit 1}' "$root/portable/images.tsv") || fail "Unknown environment: $environment"
+image=$(printf '%s\n' "$row" | cut -f2)
+credentials=
+output=
+data=
+gpu=0
+prepare=no
+accept=no
+package=
+assets_cache=
+explicit_image=no
+cache=${XDG_CACHE_HOME:-$HOME/.cache}/nanoverse-gym
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --prepare) prepare=yes; shift; continue ;;
+        --accept-isaac-terms) accept=yes; shift; continue ;;
+    esac
+    [ "$#" -ge 2 ] || fail "Missing value for $1"
+    case "$1" in
+        --credentials) credentials=$2 ;;
+        --output) output=$2 ;;
+        --data) data=$2 ;;
+        --image) image=$2; explicit_image=yes ;;
+        --gpu) gpu=$2 ;;
+        --common-package) package=$2 ;;
+        --cache) cache=$2 ;;
+        --assets-cache) assets_cache=$2 ;;
+        *) fail "Unknown option: $1" ;;
+    esac
+    shift 2
+done
+if [ "$environment" = behavior1k ]; then
+    [ -n "$data" ] || fail 'BEHAVIOR requires --data with the official user-supplied data and key'
+fi
+if [ "$prepare" = yes ]; then
+    [ "$explicit_image" = no ] || fail 'Choose --prepare or --image'
+    [ "$environment" = robodojo ] || fail 'Official-source preparation currently supports RoboDojo only'
+    [ "$accept" = yes ] || fail 'Official-source preparation requires --accept-isaac-terms'
+else
+    [ -z "$assets_cache" ] || fail '--assets-cache requires --prepare'
+    [ "$image" != - ] || fail "No public runtime image is published for $environment. A maintainer can supply --image for local acceptance."
+fi
+if [ -n "$assets_cache" ]; then
+    assets_cache=$(CDPATH= cd -- "$assets_cache" && pwd -P) || fail '--assets-cache must name an existing directory'
+    [ -d "$assets_cache/Assets" ] || fail '--assets-cache must contain the public RoboDojo Assets tree'
+fi
+[ -f "$credentials" ] || fail '--credentials must name a regular file'
+[ -n "$output" ] || fail '--output is required'
+case "$gpu" in ''|*[!0-9]*) fail '--gpu must be a GPU index' ;; esac
+command -v docker >/dev/null 2>&1 || fail 'Docker is required'
+credentials=$(CDPATH= cd -- "$(dirname -- "$credentials")" && printf '%s/%s' "$(pwd)" "$(basename -- "$credentials")")
+parent=$(CDPATH= cd -- "$(dirname -- "$output")" && pwd) || fail 'The output parent directory must exist'
+output=$parent/$(basename -- "$output")
+if [ -n "$data" ]; then
+    case "$environment" in robodojo|behavior1k) ;; *) fail '--data is supported only for RoboDojo and BEHAVIOR' ;; esac
+    data=$(CDPATH= cd -- "$data" && pwd) || fail '--data must name an existing directory'
+    if [ "$environment" = robodojo ]; then
+        [ -f "$data/Assets/Robots/x5/curobo_tmp.yml" ] || fail '--data must contain the public RoboDojo Assets tree'
+    fi
+fi
+case "$credentials$output$data$assets_cache" in *,*) fail 'Docker bind paths cannot contain commas' ;; esac
+docker info >/dev/null
+if [ "$prepare" = yes ]; then
+    [ ! -e "$output" ] && [ ! -L "$output" ] || fail 'Refusing to reuse the output directory'
+    actual_credentials=$(readlink -f -- "$credentials") || fail 'Cannot resolve model credential file'
+    case "$actual_credentials" in
+        "$root/portable/"*|"$root/environment_servers/"*|"$root/responses_api_models/"*|"$root/scripts/"*|"$root/releases/robodojo/"*)
+            fail 'Keep model credentials outside packaged source directories' ;;
+    esac
+    if [ -n "$assets_cache" ]; then
+        case "$actual_credentials" in "$assets_cache/"*) fail 'Keep model credentials outside the asset cache' ;; esac
+    fi
+    image=$(sh "$root/portable/prepare.sh" "$root" "$gpu" "$cache" "$package" "$accept" "$assets_cache")
+fi
+case "$image" in ''|-*) fail 'Invalid image reference' ;; esac
+if ! docker image inspect "$image" >/dev/null 2>&1; then
+    docker pull "$image"
+fi
+identity=$(docker image inspect "$image" --format '{{.Id}}')
+umask 077
+mkdir -- "$output" || fail 'Refusing to reuse the output directory'
+lease=$(mktemp "$output/.launch.XXXXXX")
+container=nvgym-$(basename -- "$lease")
+printf '%s\n' "$container" > "$output/container-name"
+cleanup() {
+    status=$?
+    trap - EXIT HUP INT TERM
+    if [ -n "$container" ]; then
+        if attributes=$(docker inspect --format '{{.Id}} {{index .Config.Labels "com.nvidia.nanoverse-gym.run"}}' "$container" 2>/dev/null); then
+            inspected_id=${attributes%% *}
+            owner=${attributes#* }
+            if [ "$owner" != "$container" ]; then
+                printf '%s\n' '{"container_removed":false,"error":"Container owner mismatch"}' > "$output/docker-cleanup.json"
+                exit 1
+            fi
+            docker stop --time 100 "$inspected_id" >/dev/null 2>&1 || true
+            if docker rm "$inspected_id" >/dev/null 2>&1; then
+                printf '%s\n' '{"container_removed":true}' > "$output/docker-cleanup.json"
+                rm -- "$lease"
+            else
+                printf '%s\n' '{"container_removed":false}' > "$output/docker-cleanup.json"
+                status=1
+            fi
+        else
+            printf '%s\n' '{"container_removed":null,"error":"Docker inspection failed"}' > "$output/docker-cleanup.json"
+            status=1
+        fi
+    fi
+    exit "$status"
+}
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+set -- "$identity" "$environment"
+if [ -n "$data" ]; then
+    set -- --mount "type=bind,source=$data,target=/data,readonly" "$identity" "$environment" --data-root /data
+fi
+docker create --name "$container" --cidfile "$output/container-id" \
+    --init --gpus "device=$gpu" --cpus 12 --memory 64g --pids-limit 4096 \
+    --shm-size 2g --log-driver local --log-opt max-size=10m --log-opt max-file=2 \
+    --label com.nvidia.nanoverse-gym.service=local-evaluation \
+    --label "com.nvidia.nanoverse-gym.run=$container" \
+    --label "com.nvidia.nanoverse-gym.environment=$environment" \
+    --env NVIDIA_DRIVER_CAPABILITIES=all \
+    --mount "type=bind,source=$credentials,target=/run/secrets/model.env,readonly" \
+    --mount "type=bind,source=$output,target=/output" \
+    "$@" >/dev/null
+printf '%s\n' "$identity" > "$output/image-id"
+docker start --attach "$container" &
+attached=$!
+wait "$attached" || true
+state=$(docker inspect "$container" --format '{{.State.Status}}')
+[ "$state" = exited ] || fail "Container did not reach a terminal state: $state"
+code=$(docker inspect "$container" --format '{{.State.ExitCode}}')
+printf 'Results: %s\n' "$output"
+exit "$code"

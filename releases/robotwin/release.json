@@ -1,0 +1,101 @@
+{
+  "schema": "nvgym.release-input.v1",
+  "environment": "robotwin",
+  "episode_seconds": 1800,
+  "case_id": "robotwin-sdk-direct",
+  "config_source": {
+    "path": "config.json",
+    "sha256": "75197461bd7f81e6599581484dcee875e24cfca29b66388b7afc093e67802ceb"
+  },
+  "registry_source": {
+    "path": "registry.json",
+    "sha256": "23f6153ca930838641fab096cc284d064c916d58321060529936de9906894fdc"
+  },
+  "bindings": [
+    {
+      "document": "case",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/nanoverse/8978eda5db7/robotwin/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/native/python",
+      "expected": "/osmo/run/workspace/nanoverse/8978eda5db7/robotwin/venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/0",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/node",
+      "destination": "/opt/nvgym/deployment/node"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/1",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+      "destination": "/opt/nvgym/code/ember_bridge/harnesses/codex/main.mts"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/3",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/codex",
+      "destination": "/opt/nvgym/deployment/codex"
+    },
+    {
+      "document": "config",
+      "pointer": "/sdk/python",
+      "expected": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python",
+      "destination": "/opt/nvgym/sdk/bin/python"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/HOME",
+      "expected": "/root",
+      "destination": "/tmp"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_GUEST_PROGRAMS",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+      "destination": "/opt/nvgym/deployment/programs.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_NODE_ROOT",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+      "destination": "/opt/nvgym/code/nanoverse"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_TTC_MANIFEST",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+      "destination": "/opt/nvgym/deployment/ttc-manifest.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/PATH",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+      "destination": "/opt/nvgym/deployment:/usr/local/bin:/usr/bin:/bin"
+    }
+  ],
+  "native": {
+    "kind": "expanded_seed",
+    "image": "nvcr.io/nvidian/zhiqil-envsdk-init@sha256:1be95c537d1e1da373d16f2fec30ba7d0b1e8b7d114382acf5bf4b1024c39658",
+    "descriptor_path": "/opt/envsdk/native/seed.json",
+    "descriptor_sha256": "b27dda4e5c1210128b50ff4881d661f8c09c80e6fc2aa897af42e5ae50eaf43b",
+    "payload_path": "/opt/envsdk/native/payload",
+    "prefix": "/osmo/run/workspace/nanoverse/8978eda5db7/robotwin",
+    "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robotwin/venv/bin/python"
+  },
+  "artifacts": [],
+  "qualification": {
+    "kind": "original accepted registry and configuration bytes; packaged image not yet qualified",
+    "native_pair": {
+      "commit": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0"
+    },
+    "source_registry_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robotwin-3b08b6a1/operator-registry-direct.json",
+    "source_config_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robotwin-3b08b6a1/operator-config-direct.json",
+    "recovery_archive_sha256": "add45d113dc33b55c5781cc39ce33b67322f4ab1bd56028687451e1f27a797ae"
+  }
+}

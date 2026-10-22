@@ -1,0 +1,54 @@
+{
+  "context_mode": "standard",
+  "control": "policy",
+  "decision_limit": 40,
+  "episode_seconds": 1200,
+  "harness_command": [
+    "/tmp/nanoverse-gym-sdk/public/deployment/node",
+    "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/tmp/nanoverse-gym-sdk/public/deployment/codex"
+  ],
+  "integration": "molmospaces",
+  "log_mode": "inline",
+  "model": {
+    "base_url": "http://127.0.0.1:9/v1",
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh"
+  },
+  "native": {
+    "benchmark": "close_v1",
+    "data": "/osmo/run/workspace/envsdk/native/molmospaces/molmospaces/.molmospaces-data",
+    "filament_python": "/osmo/run/workspace/envsdk/native/molmospaces/venv-filament/bin/python",
+    "index": 890,
+    "python": "/osmo/run/workspace/envsdk/native/molmospaces/venv/bin/python",
+    "root": "/osmo/run/workspace/envsdk/native/molmospaces/molmospaces",
+    "startup_seconds": 600
+  },
+  "policies": [],
+  "provider_auth": "api_key",
+  "request_timeout_seconds": 900,
+  "roles": {
+    "actor": {
+      "harness_options": {
+        "tools": "native"
+      },
+      "limits": {
+        "model_calls": 40,
+        "seconds": 1200
+      },
+      "skills": [],
+      "tools": []
+    }
+  },
+  "sdk": {
+    "call_cap": 40,
+    "execution": "ttc",
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    },
+    "python": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python"
+  }
+}

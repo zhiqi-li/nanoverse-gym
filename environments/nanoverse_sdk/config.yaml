@@ -1,0 +1,23 @@
+observability_enabled: true
+model_call_capture_dir: /tmp/nvgym-model-calls
+
+nanoverse_sdk:
+  environment_servers:
+    nanoverse_sdk:
+      entrypoint: app.py
+      registry_path: /run/nanoverse/sdk-cases.json
+      output_root: /tmp/nvgym
+      model_server:
+        type: responses_api_models
+        name: policy_model
+      model_id: openai/openai/gpt-6.1-sol
+      max_concurrent_episodes: 1
+      queue_timeout_seconds: 30
+      default_episode_timeout_seconds: 1500
+      cleanup_timeout_seconds: 90
+
+policy_model:
+  responses_api_models:
+    nanoverse_sdk_openai:
+      entrypoint: app.py
+      openai_model: openai/openai/gpt-6.1-sol

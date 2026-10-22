@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "allocation_id": "gpu-0",
+      "case_id": "rd-final",
+      "cleanup_seconds": 60,
+      "config_path": "/mnt/lfs/home/zhiqil/nvgym-recheck-8832c3fc/rd-final-config.json",
+      "environment": "robodojo",
+      "model_calls": 20,
+      "native_seconds": 1200,
+      "policy_path": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/examples/robodojo/task-policies/general_pickup",
+      "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "runtime_env": {
+        "ACCEPT_EULA": "Y",
+        "HOME": "/root",
+        "NANOVERSE_GUEST_PROGRAMS": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+        "NANOVERSE_NODE_ROOT": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+        "NANOVERSE_TTC_MANIFEST": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+        "NVIDIA_DRIVER_CAPABILITIES": "all",
+        "OMNI_KIT_ACCEPT_EULA": "YES",
+        "OMNI_KIT_ALLOW_ROOT": "1",
+        "PATH": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+        "PRIVACY_CONSENT": "Y",
+        "PYTHONUNBUFFERED": "1"
+      }
+    },
+    {
+      "allocation_id": "gpu-0",
+      "case_id": "rf-final",
+      "cleanup_seconds": 60,
+      "config_path": "/mnt/lfs/home/zhiqil/nvgym-recheck-8832c3fc/rf-final-config.json",
+      "environment": "roboforge",
+      "model_calls": 40,
+      "native_seconds": 1200,
+      "policy_path": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/examples/robodojo/task-policies/general_pickup",
+      "python": "/osmo/run/workspace/nanoverse/8978eda5db7/robodojo/venv/bin/python",
+      "runtime_env": {
+        "ACCEPT_EULA": "Y",
+        "HOME": "/root",
+        "NANOVERSE_GUEST_PROGRAMS": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+        "NANOVERSE_NODE_ROOT": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+        "NANOVERSE_TTC_MANIFEST": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+        "NVIDIA_DRIVER_CAPABILITIES": "all",
+        "OMNI_KIT_ACCEPT_EULA": "YES",
+        "OMNI_KIT_ALLOW_ROOT": "1",
+        "PATH": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+        "PRIVACY_CONSENT": "Y",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "harness_command": [
+    "/tmp/nanoverse-gym-sdk/public/deployment/node",
+    "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/tmp/nanoverse-gym-sdk/public/deployment/codex"
+  ],
+  "model": {
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh",
+    "base_url": "http://127.0.0.1:9/v1"
+  },
+  "roles": {
+    "actor": {
+      "tools": [],
+      "skills": [],
+      "harness_options": {
+        "tools": "native"
+      }
+    }
+  },
+  "sdk": {
+    "execution": "ttc",
+    "python": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python",
+    "call_cap": 20,
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    }
+  },
+  "episode_seconds": 1200,
+  "decision_limit": 20,
+  "request_timeout_seconds": 180,
+  "log_mode": "inline",
+  "context_mode": "standard",
+  "provider_auth": "api_key",
+  "integration": "exemplar"
+}

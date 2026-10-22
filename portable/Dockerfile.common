@@ -1,0 +1,31 @@
+FROM nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04@sha256:61f6c08f2b59036cb935e56d1e31a6b64e3ae2c7ddb86d33fa0b044c7917b719
+USER root
+ENV DEBIAN_FRONTEND=noninteractive PYTHONDONTWRITEBYTECODE=1 NVIDIA_DRIVER_CAPABILITIES=all
+RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
+    ca-certificates git git-lfs g++ cmake make ninja-build pkg-config ffmpeg \
+    libgl1 libglib2.0-0 libegl1 libglu1-mesa libxt6 libvulkan1 vulkan-tools libsm6 \
+    libxext6 libxrender1 libxi6 libxrandr2 libgomp1 libasound2 libxtst6 libxkbcommon0 \
+    && rm -r /var/lib/apt/lists/*
+COPY common-runtime-v1.tar.gz /tmp/common-runtime-v1.tar.gz
+RUN echo 'fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041  /tmp/common-runtime-v1.tar.gz' | sha256sum -c - \
+    && mkdir -p /opt/nvgym && tar -xzf /tmp/common-runtime-v1.tar.gz -C /opt/nvgym --strip-components=1 \
+    && rm /tmp/common-runtime-v1.tar.gz
+COPY app /opt/nvgym/gym
+COPY inputs /opt/nvgym/inputs
+ENV PYTHONPATH=/opt/nvgym/gym:/opt/nvgym/runtime/site:/opt/nvgym/runtime/gym
+ENV PATH=/opt/nvgym/deployment:/opt/nvgym/bootstrap/bin:/opt/nvgym/runtime/python/bin:/usr/local/cuda/bin:/usr/local/nvidia/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUN /opt/nvgym/runtime/python/bin/python3.13 -B -I -m venv /opt/nvgym/bootstrap \
+    && /opt/nvgym/bootstrap/bin/python -B -m pip install --no-compile \
+        'uv==0.12.0' 'setuptools==80.9.0' 'wheel==0.45.1'
+RUN /opt/nvgym/bootstrap/bin/python -B -c \
+    "import shutil; shutil.copytree('/opt/nvgym/code/nanoverse', '/tmp/nanoverse-wheel', symlinks=True, ignore=shutil.ignore_patterns('node_modules', '__pycache__', '*.pyc'))" \
+    && mkdir -p /opt/nvgym/deployment/wheels \
+    && /opt/nvgym/bootstrap/bin/python -B -m pip wheel --no-deps --no-build-isolation \
+        --no-cache-dir --wheel-dir /opt/nvgym/deployment/wheels /tmp/nanoverse-wheel \
+    && /opt/nvgym/bootstrap/bin/python -B -m pip install --no-deps --no-compile \
+        /opt/nvgym/deployment/wheels/nanoverse-0.1.0-py3-none-any.whl \
+    && rm -r /tmp/nanoverse-wheel
+RUN /opt/nvgym/bootstrap/bin/python -B -c \
+    "import importlib; from portable.official_install import OWNERS,PAIR; from portable.native_inventory import digest; from nanoverse.environment.paths import revision; assert revision()==PAIR; assert all(digest(importlib.import_module(name).__file__)==expected for name,expected in OWNERS.items())"
+WORKDIR /opt/nvgym/gym
+ENTRYPOINT ["/opt/nvgym/runtime/python/bin/python3.13", "-B", "-m", "portable.runtime"]

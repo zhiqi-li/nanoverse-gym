@@ -1,0 +1,54 @@
+{
+  "context_mode": "compact_64k",
+  "control": "policy",
+  "decision_limit": 400,
+  "episode_seconds": 4200,
+  "harness_command": [
+    "/tmp/nanoverse-gym-sdk/public/deployment/node",
+    "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/tmp/nanoverse-gym-sdk/public/deployment/codex"
+  ],
+  "integration": "behavior1k",
+  "log_mode": "inline",
+  "model": {
+    "base_url": "http://127.0.0.1:9/v1",
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh"
+  },
+  "native": {
+    "appdata": "/mnt/lfs/home/zhiqil/nvgym-sdk-behavior1k-57f11e15/behavior-appdata/slot0",
+    "data": "/osmo/run/workspace/envsdk/native/behavior1k/datasets",
+    "instance": 0,
+    "python": "/osmo/run/workspace/envsdk/native/behavior1k/venv/bin/python",
+    "startup_seconds": 900,
+    "task": "turning_on_radio"
+  },
+  "policies": [],
+  "provider_auth": "api_key",
+  "request_timeout_seconds": 900,
+  "roles": {
+    "actor": {
+      "harness_options": {
+        "tools": "native"
+      },
+      "limits": {
+        "seconds": 4200,
+        "model_calls": 400
+      },
+      "skills": [],
+      "tools": []
+    }
+  },
+  "sdk": {
+    "base_motion": true,
+    "call_cap": 400,
+    "execution": "ttc",
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    },
+    "python": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python"
+  }
+}

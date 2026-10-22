@@ -1,0 +1,98 @@
+{
+  "schema": "nvgym.release-input.v1",
+  "environment": "exemplar",
+  "episode_seconds": 1800,
+  "case_id": "exemplar-final",
+  "config_source": {
+    "path": "config.json",
+    "sha256": "b8c161706c19b71198732b8c5e9bd5b1a1131040e54f458afa148acfbffd7e3d"
+  },
+  "registry_source": {
+    "path": "registry.json",
+    "sha256": "7f184f7fc5807a058984976bf195584e2bf11202565fda964bcd64413971fa77"
+  },
+  "bindings": [
+    {
+      "document": "config",
+      "pointer": "/harness_command/0",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/node",
+      "destination": "/opt/nvgym/deployment/node"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/1",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+      "destination": "/opt/nvgym/code/ember_bridge/harnesses/codex/main.mts"
+    },
+    {
+      "document": "config",
+      "pointer": "/harness_command/3",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/codex",
+      "destination": "/opt/nvgym/deployment/codex"
+    },
+    {
+      "document": "config",
+      "pointer": "/sdk/python",
+      "expected": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python",
+      "destination": "/opt/nvgym/sdk/bin/python"
+    },
+    {
+      "document": "case",
+      "pointer": "/python",
+      "expected": "/osmo/run/workspace/envsdk/native/robolab-0.2.1/native-venv/bin/python",
+      "destination": "/opt/nvgym/native-host/bin/python"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/PATH",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment:/usr/local/bin:/usr/bin:/bin",
+      "destination": "/opt/nvgym/deployment:/usr/local/bin:/usr/bin:/bin"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/PYTHONPATH",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/nanoverse:/tmp/nanoverse-gym-sdk/public/code/nanoverse/envs:/tmp/nanoverse-gym-sdk/public/code/ember_bridge/src",
+      "destination": "/opt/nvgym/code/nanoverse:/opt/nvgym/code/nanoverse/envs:/opt/nvgym/code/ember_bridge/src"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_NODE_ROOT",
+      "expected": "/tmp/nanoverse-gym-sdk/public/code/nanoverse",
+      "destination": "/opt/nvgym/code/nanoverse"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_TTC_MANIFEST",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/ttc-manifest.json",
+      "destination": "/opt/nvgym/deployment/ttc-manifest.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/NANOVERSE_GUEST_PROGRAMS",
+      "expected": "/tmp/nanoverse-gym-sdk/public/deployment/programs.json",
+      "destination": "/opt/nvgym/deployment/programs.json"
+    },
+    {
+      "document": "case",
+      "pointer": "/runtime_env/HOME",
+      "expected": "/root",
+      "destination": "/tmp"
+    }
+  ],
+  "native": {
+    "kind": "fixture",
+    "python": "/usr/local/bin/python3.11",
+    "image": "docker.io/library/python@sha256:77923445c077d8eb971b14b2b114a1d9cd4a87edb4c75654820ca4832ee8cb15"
+  },
+  "artifacts": [],
+  "qualification": {
+    "kind": "original accepted registry and configuration bytes; packaged image not yet qualified",
+    "native_pair": {
+      "commit": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0"
+    },
+    "source_registry_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robolab-459a336c/exemplar-final/registry.json",
+    "source_config_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robolab-459a336c/exemplar-final/config.json",
+    "recovery_archive_sha256": "add45d113dc33b55c5781cc39ce33b67322f4ab1bd56028687451e1f27a797ae",
+    "native_runtime_change": "Independent public Python 3.11 fixture image; original RoboLab native interpreter is replaced through a declared path binding."
+  }
+}
