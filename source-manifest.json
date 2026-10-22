@@ -1,6 +1,6 @@
 {
   "schema": "nvgym.public-source-candidate.v1",
-  "status": "public source candidate; common runtime prerelease; end-to-end qualification pending",
+  "status": "public source release candidate; fresh official-source application acceptance passed; external Docker-host acceptance pending",
   "files": {
     ".gitignore": {
       "sha256": "2bee06e2d2fde147e496475e21d6b5f1e361113a2b8c2a5899ae3f97bfe7cfe4",
@@ -11,8 +11,8 @@
       "bytes": 11357
     },
     "README.md": {
-      "sha256": "5a033d847d5a9dd7e0eebc4bf1dbd15e2d49532ce6a9374d7789c4057515313e",
-      "bytes": 3682
+      "sha256": "e8e712e3bdc93a15f976e4ea9531f82491eb7d73134b21e44467e1405cf963f2",
+      "bytes": 3763
     },
     "docs/portable.md": {
       "sha256": "a7570a5cc9635639d04b43d08ea4c33072d3e1284406bce0d9ae5c78d7d0d6be",
@@ -280,7 +280,7 @@
   "qualification": {
     "source_cases_covered": 49,
     "real_model_v25": "not run; v25 cold preparation rejected",
-    "external_docker_host": "pending",
+    "external_docker_host": "pending; requires an actual authorized Docker GPU host",
     "git_lfs_regression": "Old source fails materialization; repository-local filters fix it; actual Git LFS pull and checkout exercised",
     "v25_cold_attempt": "rejected: missing local Git LFS filters",
     "development_asset_verification": {
@@ -356,9 +356,142 @@
       "both_shell_syntax_checks": true,
       "actual_docker_host_lifecycle": "pending"
     },
-    "v26_fresh_preparation": "pending"
+    "v26_fresh_preparation": "passed through actual v26 image; see fresh_v27_application",
+    "real_model_v27": {
+      "kind": "real accepted RoboDojo case using user-selected GPT-6.1 Sol; no provider retry/fallback",
+      "model": "openai/openai/gpt-6.1-sol",
+      "native_origin": "fresh official-source prepare_runtime in this clean v26 common image; no checkpoint restoration; direct OSMO application, not Docker-host proof",
+      "image_digest": "sha256:0f7210c6a111b54203e8893bcd102a618e7c8df3e9cdaa70ba9d98176c254822",
+      "native_seconds": 1200,
+      "model_calls_cap": 20,
+      "returncode": 0,
+      "status": "scored",
+      "native_cleanup_confirmed": true,
+      "identities_equal": true,
+      "forced_collector_stop": false,
+      "reward": 1.0,
+      "actor": [
+        {
+          "finished": true,
+          "calls": 9,
+          "seconds": 229.931309633,
+          "has_error": false
+        }
+      ],
+      "sdk": [
+        {
+          "closed": true,
+          "faults": [],
+          "executions": 6,
+          "trajectories": 2
+        }
+      ],
+      "captured_model_calls": 9,
+      "upstream_http_statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "ttc_closed": true,
+      "watchdog_closed": true,
+      "sdk_closed": true,
+      "sdk_executions": 6,
+      "sdk_trajectories": 2,
+      "passed": true
+    },
+    "fresh_v27_application": {
+      "scope": "Direct application in one L40 container; actual Docker-host command unverified",
+      "preparation_entrypoint": "python -B -m portable.prepare_runtime --accept-isaac-terms",
+      "preparation_passed": true,
+      "preparation_seconds": 2494.0924351069843,
+      "native_seed_inputs": false,
+      "operator_asset_cache_inputs": false,
+      "preparation_model_credentials_supplied": false,
+      "preparation_external_model_calls": 0,
+      "installed_descriptor_sha256": "df0a81e2936d4ce1d02cc9ae3e434b5b525241892a965a70e6af4a35d16ea44b",
+      "native_admission_sha256": "203e078c0f1b1b2352ab746d2e67ec85bd010e155a6e2ed842402f1e41ecb2c5",
+      "software_inventory": {
+        "sha256": "37bbec119103c4c177954bec9cadc9a72969bf5f1f8d59237d3a72c17d19d7d8",
+        "bytes": 64416964187,
+        "files": 218625
+      },
+      "native_closure": {
+        "self_contained": true,
+        "base_prefix": "/opt/envsdk/native/payload/python/cpython-3.11.15-linux-x86_64-gnu",
+        "dependency_roots": [
+          "/opt/envsdk/native/payload"
+        ]
+      },
+      "recipe": {
+        "version": 1,
+        "python": "3.11.15",
+        "cuda": "12.8",
+        "disk_gib": 150,
+        "python_paths": [
+          ".",
+          "XPolicyLab"
+        ],
+        "source_name": "RoboDojo",
+        "source_url": "https://github.com/RoboDojo-Benchmark/RoboDojo.git",
+        "source_commit": "726e9aabfaa642203722eb126f5eaf0f37f3e1ad",
+        "assets_commit": "43dacb13d3051a9ccd421f4e7e08e4e3eb29dfab",
+        "scope": "Full upstream Assets; native qualification: general_pickup, eval_seed 0, layout 0",
+        "environment": "robodojo"
+      },
+      "sigterm": {
+        "passed": true,
+        "signal_sent": "SIGTERM",
+        "shutdown_seconds": 117.88292990502669,
+        "native_cleanup_complete": true,
+        "ttc_closed": true,
+        "watchdog_closed": true,
+        "sdk_closed": true,
+        "immutable_identities_equal": true,
+        "score_absent": true,
+        "files_read_by_output_owner": 588
+      },
+      "native_score_evidence": {
+        "native": {
+          "evaluation_case": null,
+          "complete": true,
+          "valid_for_success_rate": true,
+          "native_success": true,
+          "native_score": 1.0,
+          "status": "native_completed",
+          "reason": "server_close",
+          "native_control_steps": 53,
+          "native_step_limit": 400
+        },
+        "gym": {
+          "mean/reward": 1.0,
+          "mean/native_attempt": 1.0,
+          "sdk_fixture_count": 0,
+          "sdk_fixture_pass_count": 0,
+          "sdk_native_count": 1
+        },
+        "output_owner": {
+          "uid": 23301,
+          "files_read": 815,
+          "passed": true,
+          "model_credential_deleted": true
+        }
+      },
+      "preparation_proof_archive_sha256": "b1ded9cdcbe0f987068c4b88b356da3c8a751d3c29acd4b6d13c17829eaf0790",
+      "runtime_proof_archive_sha256": "e3cf9b3293ea2e849f8368838285d1bdcdb2b1afb517f84cc053dc444d52d872",
+      "preparation_proof_files_verified": 44,
+      "runtime_proof_files_verified": 375,
+      "model_credential_deleted": true,
+      "remaining_native_ttc_processes": []
+    }
   },
   "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
   "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz",
-  "matched_frozen_v26_files": 61
+  "matched_frozen_v26_files": 61,
+  "source_tag": "v0.1.1-rc.1"
 }

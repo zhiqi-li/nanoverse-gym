@@ -2,7 +2,9 @@
 
 Run a Nanoverse SDK environment through NeMo Gym, with simulation and grading owned by Nanoverse and SDK execution inside TTC.
 
-This is a release candidate. RoboDojo component checks on one L40 passed: native/SDK admission, live TTC interruption, and a GPT-6.1 Sol case with reward 1.0, seven model calls and two SDK trajectories. These runtime checks restored an operator-owned official-source software checkpoint into the tested image. Fresh one-command preparation and the external Docker-host lifecycle remain unverified. The fixed common package is available as a [prerelease component](https://github.com/zhiqi-li/nanoverse-gym/releases/tag/v0.1.0). The other eight SDK entries remain disabled until independently qualified.
+This is a source release candidate. On one L40, RoboDojo passed clean official-source preparation, SIGTERM cleanup, and a real GPT-6.1 Sol evaluation with reward 1.0, nine model calls, six SDK executions and two trajectories. The container application path used no native seed or operator data cache. The external Docker-host one-command lifecycle remains unverified. The other eight SDK entries remain disabled until independently qualified.
+
+Use the [v0.1.1-rc.1 source snapshot](https://github.com/zhiqi-li/nanoverse-gym/tree/v0.1.1-rc.1). Preparation automatically downloads the immutable [common runtime component](https://github.com/zhiqi-li/nanoverse-gym/releases/tag/v0.1.0).
 
 Use a Linux x86-64 GPU host with Docker, NVIDIA Container Toolkit, a compatible driver, 64 GiB of memory and at least 150 GiB of free installation space. Current GPU qualification uses one L40. The command needs no cluster client or access to our private storage or registry.
 
