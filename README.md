@@ -2,7 +2,7 @@
 
 Run a Nanoverse SDK environment through NeMo Gym, with simulation and grading owned by Nanoverse and SDK execution inside TTC.
 
-This is a release candidate. RoboDojo is the first environment under end-to-end qualification. Fresh official installation is being validated on L40; the new real-model run and external Docker-host lifecycle remain unverified. Public release assets have not been published yet. The other eight SDK entries remain disabled until independently qualified.
+This is a release candidate. RoboDojo is the first environment under end-to-end qualification. Fresh official installation is being validated on L40; the new real-model run and external Docker-host lifecycle remain unverified. The fixed common package is available as a [prerelease component](https://github.com/zhiqi-li/nanoverse-gym/releases/tag/v0.1.0). The other eight SDK entries remain disabled until independently qualified.
 
 Use a Linux x86-64 GPU host with Docker, NVIDIA Container Toolkit, a compatible driver, 64 GiB of memory and at least 150 GiB of free installation space. Current GPU qualification uses one L40. The command needs no cluster client or access to our private storage or registry.
 
@@ -13,7 +13,7 @@ Create `model.env` from `model.env.example` using your own API endpoint and key.
     --credentials ./model.env --output ./run-001
 ```
 
-The output directory must be new and its parent must exist. Until the public asset is published, add `--common-package ./common-runtime-v1.tar.gz` using the matching maintainer-provided common package. Its SHA256 is `fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041`.
+The output directory must be new and its parent must exist. To reuse a previously downloaded common package, add `--common-package ./common-runtime-v1.tar.gz`. Its SHA256 is `fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041`.
 
 | Component | Delivery |
 | --- | --- |

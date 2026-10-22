@@ -1,6 +1,6 @@
 {
   "schema": "nvgym.public-source-candidate.v1",
-  "status": "unpublished; runtime qualification pending",
+  "status": "public source candidate; common runtime prerelease; end-to-end qualification pending",
   "files": {
     ".gitignore": {
       "sha256": "2bee06e2d2fde147e496475e21d6b5f1e361113a2b8c2a5899ae3f97bfe7cfe4",
@@ -11,8 +11,8 @@
       "bytes": 11357
     },
     "README.md": {
-      "sha256": "719637ae52efeb811bf1172f52d2accbb601b39cf0fa21a1abf0935546efb759",
-      "bytes": 3474
+      "sha256": "302d4ca360bce14cb3dc4830664199e857f58e05bb174eda8f618aa4dc095f8a",
+      "bytes": 3511
     },
     "docs/portable.md": {
       "sha256": "c36f6303ffe7bfc9f62507372944c30f2fa25957ac1e60ea47e7238096d42595",
@@ -281,5 +281,7 @@
     "source_cases_covered": 48,
     "real_model_v25": "pending",
     "external_docker_host": "pending"
-  }
+  },
+  "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
+  "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz"
 }
