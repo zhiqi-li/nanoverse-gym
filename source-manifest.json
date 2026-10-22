@@ -15,8 +15,8 @@
       "bytes": 3511
     },
     "docs/portable.md": {
-      "sha256": "c36f6303ffe7bfc9f62507372944c30f2fa25957ac1e60ea47e7238096d42595",
-      "bytes": 33268
+      "sha256": "a7570a5cc9635639d04b43d08ea4c33072d3e1284406bce0d9ae5c78d7d0d6be",
+      "bytes": 33803
     },
     "environment_servers/nanoverse_sdk/__init__.py": {
       "sha256": "001fb25269554c173f7947784d5f3e002da867a457b52d5f6077a39f366c9e30",
@@ -103,8 +103,8 @@
       "bytes": 10588
     },
     "portable/robodojo_assets.py": {
-      "sha256": "ebd4017195387ff3ac75dea8fad4fede1be0bc5f594bbabfd73552da3673632d",
-      "bytes": 12065
+      "sha256": "366ec1e480624e53951320bce2315c80a9ba37ffad8043ec748a9e3c080ae747",
+      "bytes": 12128
     },
     "portable/runtime.py": {
       "sha256": "a15a797000862ad5c8e4cb17557e82615b1ab118948b4a70cac1dd266d08a499",
@@ -271,16 +271,23 @@
       "bytes": 3713
     },
     "tests/test_robodojo_assets.py": {
-      "sha256": "45be7089cc7353107d7489b7f77e1e37bafef231de04ba4ef3d1fbc07937e3ba",
-      "bytes": 8845
+      "sha256": "aa6fdddb6cf739df8c03aa416874c05c5f9bc217833af600f96cc711f69b2ede",
+      "bytes": 11162
     }
   },
-  "matched_frozen_v25_files": 59,
+  "matched_frozen_v25_files": 57,
   "common_package_sha256": "fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041",
   "qualification": {
-    "source_cases_covered": 48,
+    "source_cases_covered": 49,
     "real_model_v25": "pending",
-    "external_docker_host": "pending"
+    "external_docker_host": "pending",
+    "git_lfs_regression": "Old source fails materialization; repository-local filters fix it; actual Git LFS pull and checkout exercised",
+    "v25_cold_attempt": "rejected: missing local Git LFS filters",
+    "development_asset_verification": {
+      "files": 15365,
+      "bytes": 41269513111,
+      "manifest_sha256": "95e0b9b74814d8e8beb5fbd8577ac1f8cfbd870bae4395adbf03b7ca555a637e"
+    }
   },
   "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
   "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz"

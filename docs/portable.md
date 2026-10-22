@@ -28,7 +28,7 @@ obtains simulator components from their official origins. The `--prepare`
 launcher creates a GPU preparation container, saves its completed installation
 as a user-owned local image, and launches a separate evaluation container.
 Preparation receives no model credential file. This implementation remains
-under qualification: the public supporting-runtime download is not published,
+under qualification: the [fixed common package is a public prerelease](https://github.com/zhiqi-li/nanoverse-gym/releases/tag/v0.1.0),
 and the complete Docker host lifecycle has not passed acceptance. No Docker
 daemon or socket runs inside the preparation container or an OSMO task.
 
@@ -40,6 +40,13 @@ temporary home. The v25 preparation recipe places the installer home inside
 the software payload and requires all native Python dependencies to resolve
 inside that payload before sealing. This updated installation still needs
 fresh remote qualification.
+The v25 cold attempt also exposed missing local Git LFS filter configuration
+after asset objects had downloaded. The current recovery recipe initializes
+these filters locally, without global Git settings or repository hooks. The
+old implementation reproduced the pointer-file failure in a real Git LFS
+regression check; the fix and 49 related cases passed. A development continuation
+materialized and verified all 15,365 pinned asset files. This does not qualify
+the rejected v25 cold attempt or the complete Docker host path.
 RoboForge additionally needs its authored task package.
 LIBERO and RoboTwin have public-origin installer recipes to qualify. RoboLab
 must retain version 0.2.1 and Isaac Sim 5.0. RoboCasa365's five frozen asset packs
@@ -81,13 +88,12 @@ a host GPU index and defaults to `0`. The launcher pulls an absent image and
 runs the resolved image ID. A published release must replace each available
 image entry with a tested digest reference.
 
-The official-source preparation candidate accepts this command. Until the
-supporting package is publicly published, it requires a maintainer-supplied
-`--common-package` archive; the default download URL is not available yet.
+The official-source preparation candidate accepts this command. The fixed
+common package downloads anonymously from its public prerelease. An optional
+`--common-package` uses a previously downloaded copy with the same SHA256.
 
 ```sh
 ./nvgym run robodojo --prepare --accept-isaac-terms \
-    --common-package ./common-runtime-v1.tar.gz \
     --credentials ./model.env --output ./run-001
 ```
 

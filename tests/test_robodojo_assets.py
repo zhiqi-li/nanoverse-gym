@@ -2,8 +2,9 @@ import hashlib
 import json
 import subprocess
 import sys
+from contextlib import nullcontext
 from pathlib import Path
-from types import SimpleNamespace
+from types import ModuleType, SimpleNamespace
 
 import pytest
 
@@ -49,6 +50,50 @@ def test_manifest_uses_git_objects_after_lfs_checkout(official_tree):
     assert record['files']['Assets/Robots/robot.usd']['lfs'] is True
     assert record['files']['Assets/Material/license.txt']['lfs'] is False
     assert len(record['files']) == 2
+
+
+def test_recovery_materializes_lfs_objects_without_global_git_configuration(official_tree, tmp_path, monkeypatch):
+    import nanoverse.catalog
+    import nanoverse.install
+
+    repository, source, record = official_tree
+    contents = {name: (repository / name).read_bytes() for name in record['files']}
+    monkeypatch.setattr(assets, 'REPOSITORY', str(repository))
+    root = tmp_path / 'unsealed'
+    root.mkdir()
+    destination = root / 'RoboDojo'
+    source.rename(destination)
+    recipe = ModuleType('_nvgym_asset_transport_test_recipe')
+    recipe.SPEC = {'source_commit': assets.SOURCE_REVISION, 'assets_commit': assets.REVISION}
+    monkeypatch.setitem(sys.modules, recipe.__name__, recipe)
+    monkeypatch.setattr(nanoverse.catalog, 'load_catalog',
+                        lambda: {'robodojo': SimpleNamespace(installer=recipe.__name__)})
+    installation = SimpleNamespace(source=destination, python=Path(sys.executable),
+                                   state={'phase': 'assets', 'completed': ['python', 'source', 'dependencies']},
+                                   owned=lambda: nullcontext())
+    monkeypatch.setattr(nanoverse.install, 'Installation', lambda *args: installation)
+    actual_git = assets.git
+
+    def downloaded_objects(repository, *arguments, **kwargs):
+        if 'lfs' in arguments and 'pull' in arguments:
+            for name, item in record['files'].items():
+                if item['lfs']:
+                    oid = item['sha256']
+                    path = repository / '.git/lfs/objects' / oid[:2] / oid[2:4] / oid
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    path.write_bytes(contents[name])
+            return actual_git(repository, *arguments, **kwargs)
+        return actual_git(repository, *arguments, **kwargs)
+
+    # Supply cached objects; use actual Git LFS for pull and checkout.
+    monkeypatch.setattr(assets, 'git', downloaded_objects)
+    cache = tmp_path / 'recovery'
+    result = assets.recover(root, cache)
+    assert result['files_verified'] == len(contents)
+    assert result['native_installation_complete'] is False
+    for name, content in contents.items():
+        assert (destination / name).read_bytes() == content
+    assert not (cache / 'Assets').exists()
 
 
 @pytest.fixture

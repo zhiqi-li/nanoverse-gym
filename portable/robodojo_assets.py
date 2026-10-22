@@ -191,6 +191,7 @@ def recover(root, cache):
         cache.mkdir(parents=True)
         git(cache, 'init', '--quiet')
         git(cache, 'remote', 'add', 'origin', REPOSITORY)
+        git(cache, 'lfs', 'install', '--local', '--skip-repo')
         git(cache, 'sparse-checkout', 'set', 'Assets')
         git(cache, 'fetch', '--depth', '1', 'origin', REVISION)
         git(cache, 'checkout', '--detach', 'FETCH_HEAD')
