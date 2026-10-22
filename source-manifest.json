@@ -11,8 +11,8 @@
       "bytes": 11357
     },
     "README.md": {
-      "sha256": "302d4ca360bce14cb3dc4830664199e857f58e05bb174eda8f618aa4dc095f8a",
-      "bytes": 3511
+      "sha256": "5a033d847d5a9dd7e0eebc4bf1dbd15e2d49532ce6a9374d7789c4057515313e",
+      "bytes": 3682
     },
     "docs/portable.md": {
       "sha256": "a7570a5cc9635639d04b43d08ea4c33072d3e1284406bce0d9ae5c78d7d0d6be",
@@ -51,7 +51,7 @@
       "bytes": 84
     },
     "nvgym": {
-      "sha256": "361268fb6dcfaa9dd3aabfb8e5d727e179ac019ebc593a429510fac243f61267",
+      "sha256": "94b2b04562c08f2612864f7f2846f776664950303d1f78b6d824aa706428ed20",
       "bytes": 7365
     },
     "portable/Dockerfile.common": {
@@ -91,7 +91,7 @@
       "bytes": 13280
     },
     "portable/prepare.sh": {
-      "sha256": "ac9cad06a5e88e1fd53ae7258b9e67d20cb5cc30126162be7cdb4d54fb94f2dd",
+      "sha256": "203c4776d5c6c352ca4af41d501f87e57eed0dc01ac41d4b8a740f2054212597",
       "bytes": 4837
     },
     "portable/prepare_runtime.py": {
@@ -275,11 +275,11 @@
       "bytes": 11162
     }
   },
-  "matched_frozen_v25_files": 57,
+  "matched_frozen_v25_files": 55,
   "common_package_sha256": "fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041",
   "qualification": {
     "source_cases_covered": 49,
-    "real_model_v25": "pending",
+    "real_model_v25": "not run; v25 cold preparation rejected",
     "external_docker_host": "pending",
     "git_lfs_regression": "Old source fails materialization; repository-local filters fix it; actual Git LFS pull and checkout exercised",
     "v25_cold_attempt": "rejected: missing local Git LFS filters",
@@ -287,8 +287,78 @@
       "files": 15365,
       "bytes": 41269513111,
       "manifest_sha256": "95e0b9b74814d8e8beb5fbd8577ac1f8cfbd870bae4395adbf03b7ca555a637e"
-    }
+    },
+    "real_model_v26": {
+      "kind": "real accepted RoboDojo case using user-selected GPT-6.1 Sol; no provider retry/fallback",
+      "model": "openai/openai/gpt-6.1-sol",
+      "native_origin": "official-source v2 software checkpoint restored into actual v26 image; component qualification via direct OSMO application; not fresh external installation or Docker-host proof",
+      "image_digest": "sha256:0f7210c6a111b54203e8893bcd102a618e7c8df3e9cdaa70ba9d98176c254822",
+      "native_seconds": 1200,
+      "model_calls_cap": 20,
+      "returncode": 0,
+      "status": "scored",
+      "native_cleanup_confirmed": true,
+      "identities_equal": true,
+      "forced_collector_stop": false,
+      "reward": 1.0,
+      "actor": [
+        {
+          "finished": true,
+          "calls": 7,
+          "seconds": 145.889619836,
+          "has_error": false
+        }
+      ],
+      "sdk": [
+        {
+          "closed": true,
+          "faults": [],
+          "executions": 6,
+          "trajectories": 2
+        }
+      ],
+      "captured_model_calls": 7,
+      "upstream_http_statuses": [
+        200,
+        200,
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "ttc_closed": true,
+      "watchdog_closed": true,
+      "sdk_closed": true,
+      "sdk_executions": 6,
+      "sdk_trajectories": 2,
+      "passed": true
+    },
+    "v26_component": {
+      "image_digest": "sha256:0f7210c6a111b54203e8893bcd102a618e7c8df3e9cdaa70ba9d98176c254822",
+      "scope": "Actual common image and exact v2 operator-owned official-source software checkpoint; component qualification only",
+      "installed_descriptor_sha256": "17afeb7b552d99a356139ea9a48d983a5771f3516ed8eab8ce7971152a51cbeb",
+      "native_admission_sha256": "3ca992f1220ed9a7ed4b30ecfc1461e32c5c04255051319dab777fe40cfdecda",
+      "native_sdk_admission": true,
+      "software_unchanged": true,
+      "ttc_live_interruption": true,
+      "interrupted_score_absent": true,
+      "output_owner_readable_files": 588,
+      "external_model_calls_during_interruption": 0,
+      "normal_cleanup": true,
+      "model_credential_deleted": true,
+      "real_model_score": 1.0
+    },
+    "host_stop_wait": {
+      "seconds": 420,
+      "measured_app_shutdown_seconds": 126.33900240203366,
+      "focused_source_checks_passed": 4,
+      "both_shell_syntax_checks": true,
+      "actual_docker_host_lifecycle": "pending"
+    },
+    "v26_fresh_preparation": "pending"
   },
   "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
-  "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz"
+  "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz",
+  "matched_frozen_v26_files": 61
 }

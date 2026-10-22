@@ -29,7 +29,7 @@ cleanup() {
                 status=1
                 continue
             fi
-            docker stop --time 100 "$identity" >/dev/null 2>&1 || true
+            docker stop --time 420 "$identity" >/dev/null 2>&1 || true
             if [ "$container" = "$preparation" ]; then
                 docker logs "$identity" 2>&1 | tail -c 10485760 > "$cache/last-preparation.log" || true
             fi

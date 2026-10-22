@@ -120,7 +120,7 @@ cleanup() {
                 printf '%s\n' '{"container_removed":false,"error":"Container owner mismatch"}' > "$output/docker-cleanup.json"
                 exit 1
             fi
-            docker stop --time 100 "$inspected_id" >/dev/null 2>&1 || true
+            docker stop --time 420 "$inspected_id" >/dev/null 2>&1 || true
             if docker rm "$inspected_id" >/dev/null 2>&1; then
                 printf '%s\n' '{"container_removed":true}' > "$output/docker-cleanup.json"
                 rm -- "$lease"
