@@ -6,6 +6,10 @@ RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
     libgl1 libglib2.0-0 libegl1 libglu1-mesa libxt6 libvulkan1 vulkan-tools libsm6 \
     libxext6 libxrender1 libxi6 libxrandr2 libgomp1 libasound2 libxtst6 libxkbcommon0 \
     && rm -r /var/lib/apt/lists/*
+# The NVIDIA runtime provides the driver library; EGL supports headless Vulkan.
+RUN mkdir -p /etc/vulkan/icd.d \
+    && printf '%s\n' '{"file_format_version":"1.0.0","ICD":{"library_path":"libEGL_nvidia.so.0","api_version":"1.3.0"}}' \
+       > /etc/vulkan/icd.d/nvidia_icd.json
 COPY common-runtime-v1.tar.gz /tmp/common-runtime-v1.tar.gz
 RUN echo 'fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041  /tmp/common-runtime-v1.tar.gz' | sha256sum -c - \
     && mkdir -p /opt/nvgym && tar -xzf /tmp/common-runtime-v1.tar.gz -C /opt/nvgym --strip-components=1 \

@@ -147,9 +147,21 @@ def main():
     parser.add_argument('--installed-descriptor-sha256')
     parser.add_argument('--assets-cache', type=Path)
     args = parser.parse_args()
-    print(json.dumps(prepare(accept_isaac_terms=args.accept_isaac_terms,
-                              installed_descriptor_sha256=args.installed_descriptor_sha256,
-                              assets_cache=args.assets_cache), indent=2))
+    try:
+        result = prepare(accept_isaac_terms=args.accept_isaac_terms,
+                         installed_descriptor_sha256=args.installed_descriptor_sha256,
+                         assets_cache=args.assets_cache)
+    except Exception:
+        for log in sorted((NATIVE_ROOT / 'evidence').glob('*/commands.log'))[-1:]:
+            try:
+                with log.open('rb') as source:
+                    source.seek(max(0, log.stat().st_size - 131072))
+                    tail = source.read().decode(errors='replace')
+                print(f'Native preparation diagnostics: {log}\n{tail}', file=sys.stderr, flush=True)
+            except OSError:
+                pass
+        raise
+    print(json.dumps(result, indent=2))
 
 
 if __name__ == '__main__':

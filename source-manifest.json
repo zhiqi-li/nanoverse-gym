@@ -55,8 +55,8 @@
       "bytes": 7365
     },
     "portable/Dockerfile.common": {
-      "sha256": "84ad97c2f7b8a5ce9d042feeefa1af6b60f6f7fa8a501cd2c34fb7cc270b14d8",
-      "bytes": 2543
+      "sha256": "d24773e2eb3600de8386fba3bb95ec5c3b1f8f4ed37246b2bd1b7d973116d008",
+      "bytes": 2822
     },
     "portable/__init__.py": {
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -95,8 +95,8 @@
       "bytes": 4837
     },
     "portable/prepare_runtime.py": {
-      "sha256": "a153169f75a472c45c43d5841e6a9cce3bbbb128e3abe9f7391d800b92b19cf9",
-      "bytes": 8732
+      "sha256": "2726d9135b207b2707ca9b24d7ddbf36a58b6ffd489d785df0ac916945719b08",
+      "bytes": 9223
     },
     "portable/release.py": {
       "sha256": "e83174d67f1082a95fb56f4c7059627e6f22f278b56773585eb2a4f09a7189f4",
@@ -492,6 +492,21 @@
   },
   "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
   "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz",
-  "matched_frozen_v26_files": 61,
-  "source_tag": "v0.1.1-rc.1"
+  "source_tag": "v0.1.1-rc.2",
+  "parent_source_tag": "v0.1.1-rc.1",
+  "parent_candidate_frozen_v26_matches": 61,
+  "docker_host_candidate": {
+    "status": "full Docker-host acceptance pending",
+    "parent_attempt": "public RC1 download/install reached native qualification; native probe exited 1; no Gym/model calls",
+    "isolated_checks": {
+      "host_vulkan": "NVIDIA L40",
+      "original_common_container_vulkan": "ERROR_INCOMPATIBLE_DRIVER; no ICD description",
+      "headless_egl_icd_container_vulkan": "NVIDIA L40; discrete NVIDIA GPU; driver580.178.04",
+      "diagnostic_log_tail": "bounded128KiB; original preparation failure re-raised"
+    },
+    "changes": [
+      "portable/Dockerfile.common: add NVIDIA EGL headless Vulkan ICD",
+      "portable/prepare_runtime.py: emit bounded native failure log before container cleanup"
+    ]
+  }
 }
