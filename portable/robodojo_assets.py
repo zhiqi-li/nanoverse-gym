@@ -169,7 +169,7 @@ for name,item in record['files'].items():
                         'PYTHONDONTWRITEBYTECODE': '1'})
 
 
-def recover(root, cache):
+def recover(root, cache, *, environment='robodojo'):
     from nanoverse.catalog import load_catalog
     from nanoverse.install import Installation
 
@@ -178,7 +178,9 @@ def recover(root, cache):
             or (root.parent / 'preparation/sealed').exists()
             or Path('/opt/nvgym/deployment/native-admission.json').exists()):
         raise ValueError('Cannot alter admitted native software')
-    recipe = importlib.import_module(load_catalog()['robodojo'].installer)
+    if environment not in ('robodojo', 'roboforge'):
+        raise ValueError('Asset recovery supports the shared RoboDojo stack only')
+    recipe = importlib.import_module(load_catalog()[environment].installer)
     if (recipe.SPEC['source_commit'] != SOURCE_REVISION or recipe.SPEC['assets_commit'] != REVISION):
         raise ValueError('Official transport pins differ from the registered installer')
     installation = Installation(root, recipe)

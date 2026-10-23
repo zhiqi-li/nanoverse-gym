@@ -2,14 +2,14 @@
   "schema": "nvgym.release-input.v1",
   "environment": "robocasa365",
   "episode_seconds": 1800,
-  "case_id": "robocasa365-sdk-next",
+  "case_id": "robocasa365-sdk-native64",
   "config_source": {
-    "path": "config.json",
-    "sha256": "b277506d74bec2ed70c95f0aabbcc9b3ea40bb9fefe7b1bb5a36475a65e7dba4"
+    "path": "config-native64.json",
+    "sha256": "886e6dc2a3cb08a93576fa0a686f2cc6d77abf5b23cb3e8bf83bc64bcaf9200a"
   },
   "registry_source": {
-    "path": "registry.json",
-    "sha256": "500902759ea4537712acf5683d7cde52442eacbe1b2d881c10c78628c58cd9a7"
+    "path": "registry-native64.json",
+    "sha256": "2b5ee30c1794c131ce2317d149702fb39940d5ca5d0dc0c4f4b5746236d0df5c"
   },
   "bindings": [
     {
@@ -90,12 +90,33 @@
   },
   "artifacts": [],
   "qualification": {
-    "kind": "original accepted registry and configuration bytes; packaged image not yet qualified",
+    "kind": "explicit native64 SDK profile; original task,seed,physics and750-control native horizon retained; model-request budget64;1200-second actor limit unchanged",
     "native_pair": {
       "commit": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0"
     },
     "source_registry_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robocasa365-28da2db0/operator-registry.json",
     "source_config_path": "/mnt/lfs/home/zhiqil/nvgym-sdk-robocasa365-28da2db0/operator-config.json",
-    "recovery_archive_sha256": "add45d113dc33b55c5781cc39ce33b67322f4ab1bd56028687451e1f27a797ae"
+    "recovery_archive_sha256": "add45d113dc33b55c5781cc39ce33b67322f4ab1bd56028687451e1f27a797ae",
+    "base_config_source": {
+      "path": "config.json",
+      "sha256": "b277506d74bec2ed70c95f0aabbcc9b3ea40bb9fefe7b1bb5a36475a65e7dba4"
+    },
+    "base_registry_source": {
+      "path": "registry.json",
+      "sha256": "500902759ea4537712acf5683d7cde52442eacbe1b2d881c10c78628c58cd9a7"
+    },
+    "model_budget_profile": {
+      "base_model_calls": 40,
+      "model_calls": 64,
+      "task": "OpenDrawer",
+      "seed": 1,
+      "native_controls_horizon": 750,
+      "actor_seconds": 1200,
+      "comparison": "Different model-decision budget; keep both40-call policy-limit trials separately; not a benchmark-wide success-rate comparison"
+    },
+    "base_release_source": {
+      "path": "release-model40.json",
+      "sha256": "0fb58766df4ecd0b656efde1f15814831be858669877ac756714e3bde962e5d3"
+    }
   }
 }

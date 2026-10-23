@@ -136,11 +136,13 @@ class ReleaseInput:
                 absolute(native[name])
             prefix, payload = absolute(native['prefix']), absolute(native['payload_path'])
             if kind == 'installed_software':
-                if (environment != 'robodojo' or str(payload) != '/opt/envsdk/native/payload'
-                        or prefix != payload or native['python'] != str(prefix / 'venv/bin/python')
+                python = 'native-venv/bin/python' if environment == 'robolab' else 'venv/bin/python'
+                if (environment not in ('robodojo', 'roboforge', 'behavior1k', 'molmospaces', 'libero', 'robotwin', 'robolab', 'robocasa365')
+                        or str(payload) != '/opt/envsdk/native/payload'
+                        or prefix != payload or native['python'] != str(prefix / python)
                         or native['descriptor_path'] != str(
                             payload.parent / 'preparation/sealed/installed-software.json')):
-                    raise ValueError('Official RoboDojo software requires its canonical installation paths')
+                    raise ValueError('Official software requires its canonical installation paths')
             elif prefix.is_relative_to(payload) or payload.is_relative_to(prefix):
                 raise ValueError('Original prefix and baked payload must be separate image paths')
             if not PurePosixPath(native['python']).is_relative_to(prefix):
@@ -174,8 +176,11 @@ class ReleaseInput:
                     raise ValueError('BEHAVIOR requires checked external data and writable appdata bindings')
         else:
             raise ValueError('Unknown native preparation kind')
-        if environment == 'behavior1k' and kind != 'software_archive':
-            raise ValueError('BEHAVIOR requires the software-only archive native input')
+        if environment == 'behavior1k' and kind not in ('software_archive', 'installed_software'):
+            raise ValueError('BEHAVIOR requires software-only native preparation')
+        if environment == 'behavior1k' and (config['native'].get('data') != '/data'
+                or config['native'].get('appdata') != '/output/behavior-appdata'):
+            raise ValueError('BEHAVIOR requires checked external data and writable appdata bindings')
         if kind != 'software_archive' and not IMAGE.fullmatch(native['image']):
             raise ValueError('Native build image must be pinned by digest')
         provenance = {'config_sha256': document['config_source']['sha256'],

@@ -52,7 +52,8 @@ def test_manifest_uses_git_objects_after_lfs_checkout(official_tree):
     assert len(record['files']) == 2
 
 
-def test_recovery_materializes_lfs_objects_without_global_git_configuration(official_tree, tmp_path, monkeypatch):
+@pytest.mark.parametrize('environment', ['robodojo', 'roboforge'])
+def test_recovery_materializes_lfs_objects_without_global_git_configuration(official_tree, tmp_path, monkeypatch, environment):
     import nanoverse.catalog
     import nanoverse.install
 
@@ -67,7 +68,7 @@ def test_recovery_materializes_lfs_objects_without_global_git_configuration(offi
     recipe.SPEC = {'source_commit': assets.SOURCE_REVISION, 'assets_commit': assets.REVISION}
     monkeypatch.setitem(sys.modules, recipe.__name__, recipe)
     monkeypatch.setattr(nanoverse.catalog, 'load_catalog',
-                        lambda: {'robodojo': SimpleNamespace(installer=recipe.__name__)})
+                        lambda: {environment: SimpleNamespace(installer=recipe.__name__)})
     installation = SimpleNamespace(source=destination, python=Path(sys.executable),
                                    state={'phase': 'assets', 'completed': ['python', 'source', 'dependencies']},
                                    owned=lambda: nullcontext())
@@ -88,7 +89,7 @@ def test_recovery_materializes_lfs_objects_without_global_git_configuration(offi
     # Supply cached objects; use actual Git LFS for pull and checkout.
     monkeypatch.setattr(assets, 'git', downloaded_objects)
     cache = tmp_path / 'recovery'
-    result = assets.recover(root, cache)
+    result = assets.recover(root, cache, environment=environment)
     assert result['files_verified'] == len(contents)
     assert result['native_installation_complete'] is False
     for name, content in contents.items():

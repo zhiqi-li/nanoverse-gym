@@ -183,7 +183,7 @@ def verify_admission(metadata, receipt, *, restore_prefix=False):
     except Exception as error:
         errors.append(f'interpreter bindings: {error}')
     try:
-        if host['entry_policy'].get('git_read_only') is not (metadata['environment'] == 'robodojo'):
+        if host['entry_policy'].get('git_read_only') is not (metadata['environment'] in ('robodojo', 'roboforge')):
             raise ValueError('Native Git policy differs from the environment contract')
         identities.update(verify_native_host(host, native, host['native_authority'], metadata['provenance']))
     except Exception as error:
@@ -270,8 +270,14 @@ def validate(metadata, sdk_receipt, native_host_receipt):
         data_contract = metadata['external_data']
         if source_contract(ROOT / 'code/nanoverse') != data_contract:
             raise ValueError('Packaged BEHAVIOR data contract differs from paired source')
-        descriptor = json.loads(Path(metadata['native_authority']['descriptor_path']).read_text())
-        if descriptor['source_commit'] != data_contract['behavior_commit']:
+        native = metadata['provenance']['release_input']['native_input']
+        if native['kind'] == 'installed_software':
+            descriptor = json.loads(Path(native['descriptor_path']).read_text())
+            source_commit = descriptor['recipe']['source_commit']
+        else:
+            descriptor = json.loads(Path(metadata['native_authority']['descriptor_path']).read_text())
+            source_commit = descriptor['source_commit']
+        if source_commit != data_contract['behavior_commit']:
             raise ValueError('Prepared BEHAVIOR source binding differs from the paired owner')
         observed = json.loads(subprocess.check_output(
             [str(case.python), '-B', '-I', '-c',
@@ -340,7 +346,7 @@ def main():
             raise ValueError('Original native authority changed during SDK installation')
         receipt['native_host'] = create_native_host(
             native, dict(receipt), metadata['provenance'],
-            protect_git=metadata['environment'] == 'robodojo')
+            protect_git=metadata['environment'] in ('robodojo', 'roboforge'))
         try:
             receipt['sdk'] = admit_sdk(metadata, receipt['native_host'])
             verify_admission(metadata, receipt)

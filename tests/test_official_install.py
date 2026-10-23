@@ -165,3 +165,28 @@ def test_initial_seal_rejects_external_python_base(native_paths, tmp_path):
     identity['base_prefix'] = str(base)
     with pytest.raises(ValueError, match='Python base escapes'):
         owner.native_closure(root)
+
+
+def test_robolab_kit_script_directories_are_protected_before_sealing(tmp_path):
+    root = tmp_path / 'payload'
+    scripts = root / 'native-venv/lib/python3.11/site-packages/omni/data/documents/Kit/apps/Isaac-Sim/scripts'
+    (scripts / 'new_stage').mkdir(parents=True)
+    (scripts / 'example.py').write_text('preserved software bytes\n')
+    scripts.chmod(0o777)
+    (scripts / 'new_stage').chmod(0o777)
+    owner.prepare_inventory(root)
+    assert scripts.stat().st_mode & 0o777 == 0o755
+    assert (scripts / 'new_stage').stat().st_mode & 0o777 == 0o755
+    assert (scripts / 'example.py').read_text() == 'preserved software bytes\n'
+
+
+def test_completed_kit_generated_files_are_protected_without_changing_contents(tmp_path):
+    root = tmp_path / 'payload'
+    path = root / 'native-venv/lib/python3.11/site-packages/omni/cache/ogn_generated/example.usda'
+    path.parent.mkdir(parents=True)
+    path.write_bytes(b'generated Kit template')
+    path.chmod(0o666)
+    result = owner.prepare_inventory(root)
+    assert path.stat().st_mode & 0o777 == 0o644
+    assert path.read_bytes() == b'generated Kit template'
+    assert any(item['path'].endswith('example.usda') for item in result['protected_installation_modes'])

@@ -6,7 +6,7 @@ usage() {
     cat <<'EOF'
 Usage: ./nvgym list
        ./nvgym run ENV --credentials FILE --output DIRECTORY [--data DIRECTORY] [--image IMAGE] [--gpu ID]
-       ./nvgym run robodojo --prepare --accept-isaac-terms --credentials FILE --output DIRECTORY [--common-package FILE] [--assets-cache DIRECTORY]
+       ./nvgym run ENV --prepare [--accept-isaac-terms] --credentials FILE --output DIRECTORY [--common-package FILE]
 
 Runs a packaged SDK environment with Docker. The output directory must be new.
 --image selects a locally prepared release candidate until public images are published.
@@ -61,15 +61,22 @@ if [ "$environment" = behavior1k ]; then
 fi
 if [ "$prepare" = yes ]; then
     [ "$explicit_image" = no ] || fail 'Choose --prepare or --image'
-    [ "$environment" = robodojo ] || fail 'Official-source preparation currently supports RoboDojo only'
-    [ "$accept" = yes ] || fail 'Official-source preparation requires --accept-isaac-terms'
+    case "$environment" in
+        robodojo|roboforge|robolab|behavior1k) [ "$accept" = yes ] || fail 'Official-source preparation requires --accept-isaac-terms' ;;
+        exemplar|libero|robocasa365|robotwin|molmospaces) ;;
+        *) fail 'Official-source preparation is not implemented for this environment' ;;
+    esac
 else
     [ -z "$assets_cache" ] || fail '--assets-cache requires --prepare'
     [ "$image" != - ] || fail "No public runtime image is published for $environment. A maintainer can supply --image for local acceptance."
 fi
 if [ -n "$assets_cache" ]; then
     assets_cache=$(CDPATH= cd -- "$assets_cache" && pwd -P) || fail '--assets-cache must name an existing directory'
-    [ -d "$assets_cache/Assets" ] || fail '--assets-cache must contain the public RoboDojo Assets tree'
+    case "$environment" in
+        robodojo) [ -d "$assets_cache/Assets" ] || fail '--assets-cache must contain the public RoboDojo Assets tree' ;;
+        molmospaces) ;;
+        *) fail '--assets-cache supports RoboDojo and MolmoSpaces only' ;;
+    esac
 fi
 [ -f "$credentials" ] || fail '--credentials must name a regular file'
 [ -n "$output" ] || fail '--output is required'
@@ -91,13 +98,13 @@ if [ "$prepare" = yes ]; then
     [ ! -e "$output" ] && [ ! -L "$output" ] || fail 'Refusing to reuse the output directory'
     actual_credentials=$(readlink -f -- "$credentials") || fail 'Cannot resolve model credential file'
     case "$actual_credentials" in
-        "$root/portable/"*|"$root/environment_servers/"*|"$root/responses_api_models/"*|"$root/scripts/"*|"$root/releases/robodojo/"*)
+        "$root/portable/"*|"$root/environment_servers/"*|"$root/responses_api_models/"*|"$root/scripts/"*|"$root/releases/"*)
             fail 'Keep model credentials outside packaged source directories' ;;
     esac
     if [ -n "$assets_cache" ]; then
         case "$actual_credentials" in "$assets_cache/"*) fail 'Keep model credentials outside the asset cache' ;; esac
     fi
-    image=$(sh "$root/portable/prepare.sh" "$root" "$gpu" "$cache" "$package" "$accept" "$assets_cache")
+    image=$(sh "$root/portable/prepare.sh" "$root" "$gpu" "$cache" "$package" "$accept" "$assets_cache" "$environment")
 fi
 case "$image" in ''|-*) fail 'Invalid image reference' ;; esac
 if ! docker image inspect "$image" >/dev/null 2>&1; then

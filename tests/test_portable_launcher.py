@@ -52,7 +52,7 @@ printf '%s\n' sha256:prepared-candidate
         result = self.launch(credential)
         self.assertEqual(result.returncode, 75, result.stderr)
         self.assertEqual(self.arguments.read_text().splitlines(),
-                         [str(self.root), '0', str(self.root / 'cache'), '', 'yes', ''])
+                         [str(self.root), '0', str(self.root / 'cache'), '', 'yes', '', 'robodojo'])
         self.assertEqual(self.calls.read_text().splitlines(),
                          ['info', 'image inspect sha256:prepared-candidate',
                           'pull sha256:prepared-candidate'])
@@ -60,7 +60,9 @@ printf '%s\n' sha256:prepared-candidate
         self.assertFalse((self.root / 'output').exists())
 
     def test_credentials_inside_copied_sources_are_rejected_before_preparation(self):
-        for relative in ('portable', 'releases/robodojo'):
+        for relative in ('portable', 'releases/robodojo', 'releases/libero', 'releases/behavior1k',
+                         'releases/exemplar', 'releases/molmospaces', 'releases/robocasa365',
+                         'releases/roboforge', 'releases/robolab', 'releases/robotwin'):
             with self.subTest(relative=relative):
                 directory = self.root / relative
                 directory.mkdir(parents=True, exist_ok=True)
@@ -85,7 +87,7 @@ printf '%s\n' sha256:prepared-candidate
         result = self.launch(credential, cache)
         self.assertEqual(result.returncode, 75, result.stderr)
         arguments = self.arguments.read_text().splitlines()
-        self.assertEqual(arguments, [str(self.root), '0', str(self.root / 'cache'), '', 'yes', str(cache)])
+        self.assertEqual(arguments, [str(self.root), '0', str(self.root / 'cache'), '', 'yes', str(cache), 'robodojo'])
         self.assertNotIn(str(credential), arguments)
 
     def test_credentials_inside_asset_cache_are_not_mounted_for_preparation(self):

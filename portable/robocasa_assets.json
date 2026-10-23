@@ -1,0 +1,91 @@
+{
+  "schema": "nvgym.robocasa-public-assets.v1",
+  "packs": [
+    {
+      "name": "tex",
+      "parent": "robocasa/models/assets",
+      "top_level": [
+        "textures"
+      ],
+      "files": 225,
+      "extracted_bytes": 545204854,
+      "box_id": "4i85ileasdvstmlln5sbvzptz7keuoy1",
+      "resource": {
+        "uri": "https://utexas.box.com/shared/static/4i85ileasdvstmlln5sbvzptz7keuoy1.zip",
+        "sha256": "ba3a4dcef96e199cbd601c7cdb7eb46077fb6672611b7ac74c25a191bf0be392",
+        "bytes": 543180421,
+        "archive": "zip"
+      }
+    },
+    {
+      "name": "tex_generative",
+      "parent": "robocasa/models/assets",
+      "top_level": [
+        "generative_textures"
+      ],
+      "files": 900,
+      "extracted_bytes": 1196546822,
+      "box_id": "ebaad09k82tmfmlq6ohdkmrh8izl9vn5",
+      "resource": {
+        "uri": "https://utexas.box.com/shared/static/ebaad09k82tmfmlq6ohdkmrh8izl9vn5.zip",
+        "sha256": "bc05095af306222d9a799a9b0b5b16662aa546998622ee8fd3072566ea4c31ec",
+        "bytes": 1184675536,
+        "archive": "zip"
+      }
+    },
+    {
+      "name": "fixtures_lw",
+      "parent": "robocasa/models/assets",
+      "top_level": [
+        "README.md",
+        "fixtures"
+      ],
+      "files": 6048,
+      "extracted_bytes": 1443420911,
+      "box_id": "idbncsadpnaz1jfl4i6m8qejawk7p9pi",
+      "resource": {
+        "uri": "https://utexas.box.com/shared/static/idbncsadpnaz1jfl4i6m8qejawk7p9pi.zip",
+        "sha256": "62c1c87776edda9b7c42dda7b00781a1e5a7f90acc3e49d06c39c9545cbd6c3e",
+        "bytes": 529745465,
+        "archive": "zip"
+      }
+    },
+    {
+      "name": "objs_objaverse",
+      "parent": "robocasa/models/assets/objects",
+      "top_level": [
+        "objaverse"
+      ],
+      "files": 39936,
+      "extracted_bytes": 6444097576,
+      "box_id": "03eionyo8fk3a9dsksq9jb8du5lqfw8h",
+      "resource": {
+        "uri": "https://utexas.box.com/shared/static/03eionyo8fk3a9dsksq9jb8du5lqfw8h.zip",
+        "sha256": "66a7eebef3bac855301964d35d905fc2cb44d691f007f97af08d96e83db5cc08",
+        "bytes": 2163884721,
+        "archive": "zip"
+      }
+    },
+    {
+      "name": "objs_lw",
+      "parent": "robocasa/models/assets/objects",
+      "top_level": [
+        "README.md",
+        "lightwheel"
+      ],
+      "files": 17394,
+      "extracted_bytes": 1453357859,
+      "box_id": "vckqvvkh1z8t69k8qcpcmee6k66stii4",
+      "resource": {
+        "uri": "https://utexas.box.com/shared/static/vckqvvkh1z8t69k8qcpcmee6k66stii4.zip",
+        "sha256": "a1db739b0e80fc4d56d4be27d89dba3aa60000e9648c5607874700e0f14b7955",
+        "bytes": 791939656,
+        "archive": "zip"
+      }
+    }
+  ],
+  "public_origin": {
+    "source": "https://github.com/robocasa/robocasa/blob/f970a0aac4675a7e97ed5771cade4ade7044b2af/robocasa/models/assets/box_links/box_links_assets.json",
+    "transport": "same upstream archives; exact accepted SHA256/size/member counts retained; no S3 access required"
+  }
+}

@@ -1,8 +1,9 @@
-FROM nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04@sha256:61f6c08f2b59036cb935e56d1e31a6b64e3ae2c7ddb86d33fa0b044c7917b719
+ARG PUBLIC_BASE=nvcr.io/nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04@sha256:61f6c08f2b59036cb935e56d1e31a6b64e3ae2c7ddb86d33fa0b044c7917b719
+FROM ${PUBLIC_BASE}
 USER root
 ENV DEBIAN_FRONTEND=noninteractive PYTHONDONTWRITEBYTECODE=1 NVIDIA_DRIVER_CAPABILITIES=all
 RUN apt-get update -qq && apt-get install -y -qq --no-install-recommends \
-    ca-certificates git git-lfs g++ cmake make ninja-build pkg-config ffmpeg \
+    ca-certificates curl git git-lfs g++ cmake make ninja-build pkg-config ffmpeg zstd \
     libgl1 libglib2.0-0 libegl1 libglu1-mesa libxt6 libvulkan1 vulkan-tools libsm6 \
     libxext6 libxrender1 libxi6 libxrandr2 libgomp1 libasound2 libxtst6 libxkbcommon0 \
     && rm -r /var/lib/apt/lists/*

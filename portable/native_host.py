@@ -193,6 +193,27 @@ def bootstrap_bytes(identity):
             f'roots = {roots}\nsys.path[:] = roots + [path for path in sys.path if path not in roots]\n').encode()
 
 
+def set_venv_home(destination, base_prefix):
+    """Bind a derived venv to the admitted standard library, including on Python 3.10."""
+    configuration = Path(destination) / 'pyvenv.cfg'
+    protected(configuration)
+    if configuration.is_symlink() or not configuration.is_file():
+        raise ValueError('Derived venv configuration must be an owned regular file')
+    home = Path(base_prefix).resolve(strict=True) / 'bin'
+    protected(home)
+    if not home.is_dir():
+        raise ValueError('Admitted Python base has no executable directory')
+    lines = configuration.read_text().splitlines()
+    if sum(line.startswith('home = ') for line in lines) != 1:
+        raise ValueError('Derived venv has no unique Python home')
+    # CPython 3.10's nested venv points home at the source venv rather than
+    # its base. A copied interpreter then falls back to the build-time /install.
+    value = '\n'.join('home = ' + str(home) if line.startswith('home = ') else line
+                      for line in lines) + '\n'
+    if configuration.read_text() != value:
+        configuration.write_text(value)
+
+
 def host_inventory(roots):
     protected(HOST)
     if HOST.is_symlink() or not HOST.is_dir():
@@ -343,9 +364,14 @@ print(json.dumps(dict(executable=sys.executable,process_executable=os.readlink('
 
 
 def check_entry_observation(observation, identity, *, protect_git=False):
+    base_executable = Path(identity['base_executable']).resolve(strict=True)
+    if tuple(identity['version'][:2]) == (3, 10):
+        # This CPython version reports the copied venv entry, whose exact
+        # wrapper and backend bytes are checked independently by entry_policy.
+        base_executable = PYTHON
     expected = {'executable': str(PYTHON), 'process_executable': str(PYTHON.with_name('_nvgym-python')),
                 'prefix': str(HOST), 'base_prefix': str(Path(identity['base_prefix']).resolve(strict=True)),
-                'base_executable': str(Path(identity['base_executable']).resolve(strict=True)),
+                'base_executable': str(base_executable),
                 **{key: identity[key] for key in ('implementation', 'version', 'abi')},
                 'dont_write_bytecode': True, 'environment': POLICY_ENV,
                 'git_executable': str(PYTHON.with_name('git')) if protect_git else None}
@@ -413,6 +439,7 @@ def create_native_host(native, authority, provenance, *, protect_git=False):
                     raise ValueError(f'Base dependency link escapes admitted authority: {path}')
     subprocess.run([native['python'], '-B', '-I', '-m', 'venv', '--without-pip', '--copies', str(HOST)],
                    env=CLEAN_ENV, check=True, timeout=120)
+    set_venv_home(HOST, identity['base_prefix'])
     host_identity = json.loads(subprocess.check_output(
         [str(PYTHON), '-B', '-I', '-c', PROBE], env=CLEAN_ENV, text=True, timeout=120))
     if (host_identity['executable'] != str(PYTHON) or host_identity['prefix'] != str(HOST)

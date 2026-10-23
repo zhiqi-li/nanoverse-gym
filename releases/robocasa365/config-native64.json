@@ -1,0 +1,52 @@
+{
+  "context_mode": "standard",
+  "control": "policy",
+  "decision_limit": 64,
+  "episode_seconds": 1200,
+  "harness_command": [
+    "/tmp/nanoverse-gym-sdk/public/deployment/node",
+    "/tmp/nanoverse-gym-sdk/public/code/ember_bridge/harnesses/codex/main.mts",
+    "--codex",
+    "/tmp/nanoverse-gym-sdk/public/deployment/codex"
+  ],
+  "integration": "robocasa365",
+  "log_mode": "inline",
+  "model": {
+    "base_url": "http://127.0.0.1:9/v1",
+    "id": "openai/openai/gpt-6.1-sol",
+    "profile": "codex_chatgpt",
+    "reasoning": "xhigh"
+  },
+  "native": {
+    "python": "/osmo/run/workspace/envsdk/native/robocasa365/venv/bin/python",
+    "root": "/osmo/run/workspace/envsdk/native/robocasa365/robocasa",
+    "seed": 1,
+    "startup_seconds": 300,
+    "task": "OpenDrawer"
+  },
+  "policies": [],
+  "provider_auth": "api_key",
+  "request_timeout_seconds": 900,
+  "roles": {
+    "actor": {
+      "harness_options": {
+        "tools": "native"
+      },
+      "limits": {
+        "model_calls": 64,
+        "seconds": 1200
+      },
+      "skills": [],
+      "tools": []
+    }
+  },
+  "sdk": {
+    "call_cap": 64,
+    "execution": "ttc",
+    "profile": {
+      "action_space": "free",
+      "feedback": "auto"
+    },
+    "python": "/tmp/nanoverse-gym-sdk/public/clean-sdk-python/bin/python"
+  }
+}

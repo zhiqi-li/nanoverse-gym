@@ -1,6 +1,10 @@
 {
   "schema": "nvgym.public-source-release.v1",
-  "status": "RoboDojo default case qualified on actual L40 Docker host; other eight SDK entries gated",
+  "status": "Nine SDK entries independently qualified on actual Production L40 Docker host: eight native-grading environments and Exemplar CPU fixture",
+  "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
+  "source_tag": "v0.2.0",
+  "parent_source_tag": "v0.1.1",
+  "parent_source_commit": "5775ea5d045dba1b69bfbd4552d661537dd02102",
   "files": {
     ".gitignore": {
       "sha256": "2bee06e2d2fde147e496475e21d6b5f1e361113a2b8c2a5899ae3f97bfe7cfe4",
@@ -11,12 +15,20 @@
       "bytes": 11357
     },
     "README.md": {
-      "sha256": "5f203d5bc784565da763d801c0d7893811b50a42afc78dfc1b210f95a3ea0583",
-      "bytes": 3588
+      "sha256": "a05577a69987b0bc438286e6799e4ea0f89aaa081dd4e2b1471842d09535ee6b",
+      "bytes": 5046
     },
     "docs/portable.md": {
-      "sha256": "bb462161d612b05a03c81cfc30783ee15410184d661ae8e7cd8fb15758ccb610",
-      "bytes": 10613
+      "sha256": "c9134be870c5cc6c32dd00e7f3ffb078e2d18d0dc97a1dfae09f8dae74ad1267",
+      "bytes": 14676
+    },
+    "docs/qualification/robodojo-l40-20261023.json": {
+      "sha256": "534e23a4578a349691d03092b37997c0bcbd6ef24169c81324703c79b20a8374",
+      "bytes": 6052
+    },
+    "docs/qualification/sdk-nine-l40-20261024.json": {
+      "sha256": "e2e893c4e85d86eebd4a5fdd413c70221c5fef096a6fb4a8993ac42fd23754a2",
+      "bytes": 41248
     },
     "environment_servers/nanoverse_sdk/__init__.py": {
       "sha256": "001fb25269554c173f7947784d5f3e002da867a457b52d5f6077a39f366c9e30",
@@ -51,12 +63,12 @@
       "bytes": 84
     },
     "nvgym": {
-      "sha256": "94b2b04562c08f2612864f7f2846f776664950303d1f78b6d824aa706428ed20",
-      "bytes": 7365
+      "sha256": "c853dce1672793e25c0837441b65899ede25d1dff86383af66a7167c244cfa25",
+      "bytes": 7620
     },
     "portable/Dockerfile.common": {
-      "sha256": "d24773e2eb3600de8386fba3bb95ec5c3b1f8f4ed37246b2bd1b7d973116d008",
-      "bytes": 2822
+      "sha256": "9150764c23d7c38108e0c752f9256333dc532b221ba640c398fb648700fb6696",
+      "bytes": 2863
     },
     "portable/__init__.py": {
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -66,6 +78,10 @@
       "sha256": "f31f95592819cf25136db33d63399e6280c18c9b9cc3c699dba53e0a85761a37",
       "bytes": 4174
     },
+    "portable/behavior_software.py": {
+      "sha256": "a5e3977a93656971d45ceae9f5fca93b81cbc8c114e87f28c54c3595a69497c9",
+      "bytes": 8295
+    },
     "portable/build_context.py": {
       "sha256": "3f75b243ea7ce7756c94ae3684581a84fb567f4c21cc090ec78baf18b58e0839",
       "bytes": 13365
@@ -74,41 +90,61 @@
       "sha256": "d689ac60b423c35a80815d8a860bcdab6438783018b44cf64b6352dd1b480286",
       "bytes": 123
     },
+    "portable/molmo_public.py": {
+      "sha256": "8a692830e7e33ea6f8e08c1415b30850f4637b31b55bc7fac63f1b483435a8dd",
+      "bytes": 9443
+    },
     "portable/native_admission.py": {
-      "sha256": "3552903a7c24f6dbf8766194210a9b4c2df4d42c95f82dbee09adc29cb3dcb65",
-      "bytes": 20171
+      "sha256": "269c87a6c337ac2c990ef238f583e46f9324f85a3ffaf7843de79fce56a5f134",
+      "bytes": 20532
     },
     "portable/native_host.py": {
-      "sha256": "cb8c13b8f02060d135647c8195fa4edeccd6a5ddaf83a15915bfcef5789da447",
-      "bytes": 27116
+      "sha256": "90afcbbaca0f3ff9d369cebd1390a166c8ca4f2d36e61a3a1490707d2c012010",
+      "bytes": 28543
     },
     "portable/native_inventory.py": {
       "sha256": "5d3b513a026110db275cf79814976a44941e15ba8fdd39ffcf2a2eb37c263744",
       "bytes": 1595
     },
     "portable/official_install.py": {
-      "sha256": "068414220acebfeaa27c4a48af6b894233315f38a26c8e546d611d2167eb273e",
-      "bytes": 13280
+      "sha256": "0cdc81f4b33e317b92a6ee7a33bdb0158a6e13989dbb8d08ee37b2547af5c362",
+      "bytes": 17912
     },
     "portable/prepare.sh": {
-      "sha256": "203c4776d5c6c352ca4af41d501f87e57eed0dc01ac41d4b8a740f2054212597",
-      "bytes": 4837
+      "sha256": "59e05ff71a3fd1381f478c1250150ef633e6fba4b7caf71e76c3d704548fa4d3",
+      "bytes": 6708
     },
     "portable/prepare_runtime.py": {
-      "sha256": "2726d9135b207b2707ca9b24d7ddbf36a58b6ffd489d785df0ac916945719b08",
-      "bytes": 9223
+      "sha256": "68e33eac5b9c9789004b3a2e6c24633b27718decb4cef8382d98eea3d22ce447",
+      "bytes": 18921
     },
     "portable/release.py": {
-      "sha256": "e83174d67f1082a95fb56f4c7059627e6f22f278b56773585eb2a4f09a7189f4",
-      "bytes": 10588
+      "sha256": "af95ee0fa40b59bbf76ecf0681069782254e819350d4ca7f262b41fa78339665",
+      "bytes": 11080
+    },
+    "portable/robocasa_assets.json": {
+      "sha256": "62eb1db480dcc24acc4c7195812a6dd8a954b87146eed202c9d73c377dcfd375",
+      "bytes": 2941
+    },
+    "portable/robocasa_assets.py": {
+      "sha256": "8e42adbd81946941f5c42fc57d068d47f6b112a11fb82dad217cc466463ae5ed",
+      "bytes": 762
     },
     "portable/robodojo_assets.py": {
-      "sha256": "366ec1e480624e53951320bce2315c80a9ba37ffad8043ec748a9e3c080ae747",
-      "bytes": 12128
+      "sha256": "73fd52d8f5c46ef52d677777f8afa44f29d0080adfcbbf892afa73dc86e1f213",
+      "bytes": 12292
+    },
+    "portable/roboforge_prepare.py": {
+      "sha256": "cb1abe4c5a6d458855dc43c684808ee3ce98866ea8a940d327808eb9826a2e8f",
+      "bytes": 1716
+    },
+    "portable/robolab_cache.py": {
+      "sha256": "a801739f39e37480e6bd914dd383ba92a4b793f687d026bef256fb70713acaa2",
+      "bytes": 2019
     },
     "portable/runtime.py": {
-      "sha256": "a15a797000862ad5c8e4cb17557e82615b1ab118948b4a70cac1dd266d08a499",
-      "bytes": 10151
+      "sha256": "1e83612df6e954580eedac1e182c67a02670720f0f738572edd4a454c2d41f87",
+      "bytes": 10166
     },
     "portable/sdk_admission.py": {
       "sha256": "db75b4a3f4eb2a94f99225b9b22d74ac456d5e5d781b428fec4a76445ed4626e",
@@ -170,17 +206,29 @@
       "sha256": "d0f268c15539dd68c92cf988bf435aa4920aa96a142dba2894252abfcd21a5cf",
       "bytes": 3830
     },
+    "releases/robocasa365/config-native64.json": {
+      "sha256": "886e6dc2a3cb08a93576fa0a686f2cc6d77abf5b23cb3e8bf83bc64bcaf9200a",
+      "bytes": 1295
+    },
     "releases/robocasa365/config.json": {
       "sha256": "b277506d74bec2ed70c95f0aabbcc9b3ea40bb9fefe7b1bb5a36475a65e7dba4",
       "bytes": 1295
+    },
+    "releases/robocasa365/registry-native64.json": {
+      "sha256": "2b5ee30c1794c131ce2317d149702fb39940d5ca5d0dc0c4f4b5746236d0df5c",
+      "bytes": 899
     },
     "releases/robocasa365/registry.json": {
       "sha256": "500902759ea4537712acf5683d7cde52442eacbe1b2d881c10c78628c58cd9a7",
       "bytes": 947
     },
-    "releases/robocasa365/release.json": {
+    "releases/robocasa365/release-model40.json": {
       "sha256": "0fb58766df4ecd0b656efde1f15814831be858669877ac756714e3bde962e5d3",
       "bytes": 3830
+    },
+    "releases/robocasa365/release.json": {
+      "sha256": "145cf545c4d42ec4a70b97509738562b75fb66a9beb834a240bef197b321d6f6",
+      "bytes": 4730
     },
     "releases/robodojo/config.json": {
       "sha256": "8c964e19c9b919aa12ee233311bdb05fa787e9af820417023046fb80729b0efd",
@@ -258,63 +306,73 @@
       "sha256": "88eb15f884faa4574ee56c56682998faf63fe8ef4b5acd28271b8e115c5247a1",
       "bytes": 280
     },
+    "tests/test_behavior_software.py": {
+      "sha256": "6b5a00558e162cd950c43619a6890e04cdb2145ded9815a6c4a98dc9902923b6",
+      "bytes": 2268
+    },
+    "tests/test_molmo_public.py": {
+      "sha256": "84d0b9597a4ad91cf5a40d0c8aad2d55bb13f568dc447b5ef304191e7036a6ff",
+      "bytes": 1865
+    },
+    "tests/test_native_host.py": {
+      "sha256": "feeefb0a3531f587c7f6b69bebae985bac7d3efd19c8c299b0b590e505b86922",
+      "bytes": 35307
+    },
     "tests/test_official_install.py": {
-      "sha256": "7295e24d566f1deb2bd689416b0885da4a7ae78ab3cdadb70aff97ec49efa8ac",
-      "bytes": 7019
+      "sha256": "0454bfd87e053ecb2c5f6fcbdff150564795d79dba3eb031411cca576eee184e",
+      "bytes": 8243
     },
     "tests/test_portable_launcher.py": {
-      "sha256": "41947908072ab530c0cd8d8cea0793b37c5d0df8b83bbe2d3c1b67d9b3ed0763",
-      "bytes": 5053
+      "sha256": "0f0c2c97f06c821f48234e91c976335c82db30ab3028824949cf32d63473c847",
+      "bytes": 5301
     },
     "tests/test_prepare_runtime.py": {
-      "sha256": "1a9e592c112037e888fc17a9d557c62ecc94b97b1a524a11d9db2b421075052f",
-      "bytes": 3713
+      "sha256": "cf83afcc7fcaafdd0f5b4a84e44224427074906dffde16d09f7daeaece79f102",
+      "bytes": 8677
     },
     "tests/test_robodojo_assets.py": {
-      "sha256": "aa6fdddb6cf739df8c03aa416874c05c5f9bc217833af600f96cc711f69b2ede",
-      "bytes": 11162
+      "sha256": "3ae848940df0e7f26eb9045891480c71e0ea1232943fb125d2dbfb46f630a157",
+      "bytes": 11268
     },
-    "docs/qualification/robodojo-l40-20261023.json": {
-      "sha256": "534e23a4578a349691d03092b37997c0bcbd6ef24169c81324703c79b20a8374",
-      "bytes": 6052
+    "tests/test_roboforge_prepare.py": {
+      "sha256": "37a7d49b5859e35c3e0f1e9a1da09389f24c4073ba56516dcdeace38d4072965",
+      "bytes": 1514
     }
   },
-  "matched_frozen_v25_files": 55,
-  "common_package_sha256": "fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041",
-  "qualification": {
-    "external_docker_host": "passed: cold official-source preparation, same-image real GPT-6.1 Sol evaluation, normal and live host-launcher SIGTERM cleanup",
-    "report": "docs/qualification/robodojo-l40-20261023.json",
-    "tested_source_commit": "fb6ede5b852bd229c3457b23dfd1adfc57a91c34",
-    "qualified_environments": [
-      "robodojo"
-    ],
-    "qualified_cases": 1,
-    "other_sdk_environments": "gated; not independently qualified",
-    "real_model_reward": 1.0,
-    "model_requests": 8,
-    "sdk_executions": 9,
-    "sdk_trajectories": 2,
-    "native_control_steps": 65,
-    "prior_component_history": "Earlier OSMO/component evidence remains in v0.1.1-rc.2 history; it is not the Docker-host acceptance evidence."
-  },
-  "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
   "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz",
-  "source_tag": "v0.1.1",
-  "parent_source_tag": "v0.1.1-rc.2",
-  "parent_candidate_frozen_v26_matches": 61,
-  "docker_host_candidate": {
-    "status": "passed; see qualification report",
-    "parent_attempt": "public RC1 download/install reached native qualification; native probe exited 1; no Gym/model calls",
-    "isolated_checks": {
-      "host_vulkan": "NVIDIA L40",
-      "original_common_container_vulkan": "ERROR_INCOMPATIBLE_DRIVER; no ICD description",
-      "headless_egl_icd_container_vulkan": "NVIDIA L40; discrete NVIDIA GPU; driver580.178.04",
-      "diagnostic_log_tail": "bounded128KiB; original preparation failure re-raised"
-    },
-    "changes": [
-      "portable/Dockerfile.common: add NVIDIA EGL headless Vulkan ICD",
-      "portable/prepare_runtime.py: emit bounded native failure log before container cleanup"
+  "common_package_sha256": "fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041",
+  "sdk_pair": "sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0",
+  "gym_commit": "69c2ff3ebd6e7b6c2106f5f8cb1ae5c0f912b8bb",
+  "qualification": {
+    "report": "docs/qualification/sdk-nine-l40-20261024.json",
+    "qualified_sdk_entries": [
+      "behavior1k",
+      "exemplar",
+      "libero",
+      "molmospaces",
+      "robocasa365",
+      "robodojo",
+      "roboforge",
+      "robolab",
+      "robotwin"
     ],
-    "qualified_runtime_commit": "fb6ede5b852bd229c3457b23dfd1adfc57a91c34"
+    "completed_native_grading_environments": [
+      "behavior1k",
+      "libero",
+      "molmospaces",
+      "robocasa365",
+      "robodojo",
+      "roboforge",
+      "robolab",
+      "robotwin"
+    ],
+    "cpu_conformance_fixtures": [
+      "exemplar"
+    ],
+    "scope": "one accepted default case per entry; actual model/SDK/native evidence, normal cleanup and same-image live host SIGTERM; not benchmark-wide success rates",
+    "data_requirements": "BEHAVIOR: licensed user data/key; MolmoSpaces: qualified portable official-data directory; other documented public downloads automated",
+    "native_images": "not redistributed; official-source local preparation",
+    "robocasa_model_budget": "explicit native64 profile; OpenDrawer/seed1/native750controls/actor1200seconds unchanged; original40 inputs/trials retained separately",
+    "behavior_model_outcome": "completed native grade0.0; task unsuccessful; not a policy-limit penalty"
   }
 }

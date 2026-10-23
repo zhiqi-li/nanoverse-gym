@@ -73,7 +73,7 @@ def main():
             report['native_authority'] = metadata['native_authority']
         work = Path(temporary.name)
         config = metadata['config']
-        if args.environment == 'robodojo' and ownership.st_uid:
+        if args.environment in ('robodojo', 'roboforge') and ownership.st_uid:
             config['kit_trusted_owners'] = [ownership.st_uid]
         if args.environment == 'behavior1k':
             contract = metadata['external_data']
