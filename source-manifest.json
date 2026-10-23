@@ -1,6 +1,6 @@
 {
-  "schema": "nvgym.public-source-candidate.v1",
-  "status": "public source release candidate; fresh official-source application acceptance passed; external Docker-host acceptance pending",
+  "schema": "nvgym.public-source-release.v1",
+  "status": "RoboDojo default case qualified on actual L40 Docker host; other eight SDK entries gated",
   "files": {
     ".gitignore": {
       "sha256": "2bee06e2d2fde147e496475e21d6b5f1e361113a2b8c2a5899ae3f97bfe7cfe4",
@@ -11,12 +11,12 @@
       "bytes": 11357
     },
     "README.md": {
-      "sha256": "e8e712e3bdc93a15f976e4ea9531f82491eb7d73134b21e44467e1405cf963f2",
-      "bytes": 3763
+      "sha256": "5f203d5bc784565da763d801c0d7893811b50a42afc78dfc1b210f95a3ea0583",
+      "bytes": 3588
     },
     "docs/portable.md": {
-      "sha256": "a7570a5cc9635639d04b43d08ea4c33072d3e1284406bce0d9ae5c78d7d0d6be",
-      "bytes": 33803
+      "sha256": "bb462161d612b05a03c81cfc30783ee15410184d661ae8e7cd8fb15758ccb610",
+      "bytes": 10613
     },
     "environment_servers/nanoverse_sdk/__init__.py": {
       "sha256": "001fb25269554c173f7947784d5f3e002da867a457b52d5f6077a39f366c9e30",
@@ -273,230 +273,37 @@
     "tests/test_robodojo_assets.py": {
       "sha256": "aa6fdddb6cf739df8c03aa416874c05c5f9bc217833af600f96cc711f69b2ede",
       "bytes": 11162
+    },
+    "docs/qualification/robodojo-l40-20261023.json": {
+      "sha256": "534e23a4578a349691d03092b37997c0bcbd6ef24169c81324703c79b20a8374",
+      "bytes": 6052
     }
   },
   "matched_frozen_v25_files": 55,
   "common_package_sha256": "fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041",
   "qualification": {
-    "source_cases_covered": 49,
-    "real_model_v25": "not run; v25 cold preparation rejected",
-    "external_docker_host": "pending; requires an actual authorized Docker GPU host",
-    "git_lfs_regression": "Old source fails materialization; repository-local filters fix it; actual Git LFS pull and checkout exercised",
-    "v25_cold_attempt": "rejected: missing local Git LFS filters",
-    "development_asset_verification": {
-      "files": 15365,
-      "bytes": 41269513111,
-      "manifest_sha256": "95e0b9b74814d8e8beb5fbd8577ac1f8cfbd870bae4395adbf03b7ca555a637e"
-    },
-    "real_model_v26": {
-      "kind": "real accepted RoboDojo case using user-selected GPT-6.1 Sol; no provider retry/fallback",
-      "model": "openai/openai/gpt-6.1-sol",
-      "native_origin": "official-source v2 software checkpoint restored into actual v26 image; component qualification via direct OSMO application; not fresh external installation or Docker-host proof",
-      "image_digest": "sha256:0f7210c6a111b54203e8893bcd102a618e7c8df3e9cdaa70ba9d98176c254822",
-      "native_seconds": 1200,
-      "model_calls_cap": 20,
-      "returncode": 0,
-      "status": "scored",
-      "native_cleanup_confirmed": true,
-      "identities_equal": true,
-      "forced_collector_stop": false,
-      "reward": 1.0,
-      "actor": [
-        {
-          "finished": true,
-          "calls": 7,
-          "seconds": 145.889619836,
-          "has_error": false
-        }
-      ],
-      "sdk": [
-        {
-          "closed": true,
-          "faults": [],
-          "executions": 6,
-          "trajectories": 2
-        }
-      ],
-      "captured_model_calls": 7,
-      "upstream_http_statuses": [
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200
-      ],
-      "ttc_closed": true,
-      "watchdog_closed": true,
-      "sdk_closed": true,
-      "sdk_executions": 6,
-      "sdk_trajectories": 2,
-      "passed": true
-    },
-    "v26_component": {
-      "image_digest": "sha256:0f7210c6a111b54203e8893bcd102a618e7c8df3e9cdaa70ba9d98176c254822",
-      "scope": "Actual common image and exact v2 operator-owned official-source software checkpoint; component qualification only",
-      "installed_descriptor_sha256": "17afeb7b552d99a356139ea9a48d983a5771f3516ed8eab8ce7971152a51cbeb",
-      "native_admission_sha256": "3ca992f1220ed9a7ed4b30ecfc1461e32c5c04255051319dab777fe40cfdecda",
-      "native_sdk_admission": true,
-      "software_unchanged": true,
-      "ttc_live_interruption": true,
-      "interrupted_score_absent": true,
-      "output_owner_readable_files": 588,
-      "external_model_calls_during_interruption": 0,
-      "normal_cleanup": true,
-      "model_credential_deleted": true,
-      "real_model_score": 1.0
-    },
-    "host_stop_wait": {
-      "seconds": 420,
-      "measured_app_shutdown_seconds": 126.33900240203366,
-      "focused_source_checks_passed": 4,
-      "both_shell_syntax_checks": true,
-      "actual_docker_host_lifecycle": "pending"
-    },
-    "v26_fresh_preparation": "passed through actual v26 image; see fresh_v27_application",
-    "real_model_v27": {
-      "kind": "real accepted RoboDojo case using user-selected GPT-6.1 Sol; no provider retry/fallback",
-      "model": "openai/openai/gpt-6.1-sol",
-      "native_origin": "fresh official-source prepare_runtime in this clean v26 common image; no checkpoint restoration; direct OSMO application, not Docker-host proof",
-      "image_digest": "sha256:0f7210c6a111b54203e8893bcd102a618e7c8df3e9cdaa70ba9d98176c254822",
-      "native_seconds": 1200,
-      "model_calls_cap": 20,
-      "returncode": 0,
-      "status": "scored",
-      "native_cleanup_confirmed": true,
-      "identities_equal": true,
-      "forced_collector_stop": false,
-      "reward": 1.0,
-      "actor": [
-        {
-          "finished": true,
-          "calls": 9,
-          "seconds": 229.931309633,
-          "has_error": false
-        }
-      ],
-      "sdk": [
-        {
-          "closed": true,
-          "faults": [],
-          "executions": 6,
-          "trajectories": 2
-        }
-      ],
-      "captured_model_calls": 9,
-      "upstream_http_statuses": [
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200
-      ],
-      "ttc_closed": true,
-      "watchdog_closed": true,
-      "sdk_closed": true,
-      "sdk_executions": 6,
-      "sdk_trajectories": 2,
-      "passed": true
-    },
-    "fresh_v27_application": {
-      "scope": "Direct application in one L40 container; actual Docker-host command unverified",
-      "preparation_entrypoint": "python -B -m portable.prepare_runtime --accept-isaac-terms",
-      "preparation_passed": true,
-      "preparation_seconds": 2494.0924351069843,
-      "native_seed_inputs": false,
-      "operator_asset_cache_inputs": false,
-      "preparation_model_credentials_supplied": false,
-      "preparation_external_model_calls": 0,
-      "installed_descriptor_sha256": "df0a81e2936d4ce1d02cc9ae3e434b5b525241892a965a70e6af4a35d16ea44b",
-      "native_admission_sha256": "203e078c0f1b1b2352ab746d2e67ec85bd010e155a6e2ed842402f1e41ecb2c5",
-      "software_inventory": {
-        "sha256": "37bbec119103c4c177954bec9cadc9a72969bf5f1f8d59237d3a72c17d19d7d8",
-        "bytes": 64416964187,
-        "files": 218625
-      },
-      "native_closure": {
-        "self_contained": true,
-        "base_prefix": "/opt/envsdk/native/payload/python/cpython-3.11.15-linux-x86_64-gnu",
-        "dependency_roots": [
-          "/opt/envsdk/native/payload"
-        ]
-      },
-      "recipe": {
-        "version": 1,
-        "python": "3.11.15",
-        "cuda": "12.8",
-        "disk_gib": 150,
-        "python_paths": [
-          ".",
-          "XPolicyLab"
-        ],
-        "source_name": "RoboDojo",
-        "source_url": "https://github.com/RoboDojo-Benchmark/RoboDojo.git",
-        "source_commit": "726e9aabfaa642203722eb126f5eaf0f37f3e1ad",
-        "assets_commit": "43dacb13d3051a9ccd421f4e7e08e4e3eb29dfab",
-        "scope": "Full upstream Assets; native qualification: general_pickup, eval_seed 0, layout 0",
-        "environment": "robodojo"
-      },
-      "sigterm": {
-        "passed": true,
-        "signal_sent": "SIGTERM",
-        "shutdown_seconds": 117.88292990502669,
-        "native_cleanup_complete": true,
-        "ttc_closed": true,
-        "watchdog_closed": true,
-        "sdk_closed": true,
-        "immutable_identities_equal": true,
-        "score_absent": true,
-        "files_read_by_output_owner": 588
-      },
-      "native_score_evidence": {
-        "native": {
-          "evaluation_case": null,
-          "complete": true,
-          "valid_for_success_rate": true,
-          "native_success": true,
-          "native_score": 1.0,
-          "status": "native_completed",
-          "reason": "server_close",
-          "native_control_steps": 53,
-          "native_step_limit": 400
-        },
-        "gym": {
-          "mean/reward": 1.0,
-          "mean/native_attempt": 1.0,
-          "sdk_fixture_count": 0,
-          "sdk_fixture_pass_count": 0,
-          "sdk_native_count": 1
-        },
-        "output_owner": {
-          "uid": 23301,
-          "files_read": 815,
-          "passed": true,
-          "model_credential_deleted": true
-        }
-      },
-      "preparation_proof_archive_sha256": "b1ded9cdcbe0f987068c4b88b356da3c8a751d3c29acd4b6d13c17829eaf0790",
-      "runtime_proof_archive_sha256": "e3cf9b3293ea2e849f8368838285d1bdcdb2b1afb517f84cc053dc444d52d872",
-      "preparation_proof_files_verified": 44,
-      "runtime_proof_files_verified": 375,
-      "model_credential_deleted": true,
-      "remaining_native_ttc_processes": []
-    }
+    "external_docker_host": "passed: cold official-source preparation, same-image real GPT-6.1 Sol evaluation, normal and live host-launcher SIGTERM cleanup",
+    "report": "docs/qualification/robodojo-l40-20261023.json",
+    "tested_source_commit": "fb6ede5b852bd229c3457b23dfd1adfc57a91c34",
+    "qualified_environments": [
+      "robodojo"
+    ],
+    "qualified_cases": 1,
+    "other_sdk_environments": "gated; not independently qualified",
+    "real_model_reward": 1.0,
+    "model_requests": 8,
+    "sdk_executions": 9,
+    "sdk_trajectories": 2,
+    "native_control_steps": 65,
+    "prior_component_history": "Earlier OSMO/component evidence remains in v0.1.1-rc.2 history; it is not the Docker-host acceptance evidence."
   },
   "source_repository": "https://github.com/zhiqi-li/nanoverse-gym",
   "common_package_url": "https://github.com/zhiqi-li/nanoverse-gym/releases/download/v0.1.0/common-runtime-v1.tar.gz",
-  "source_tag": "v0.1.1-rc.2",
-  "parent_source_tag": "v0.1.1-rc.1",
+  "source_tag": "v0.1.1",
+  "parent_source_tag": "v0.1.1-rc.2",
   "parent_candidate_frozen_v26_matches": 61,
   "docker_host_candidate": {
-    "status": "full Docker-host acceptance pending",
+    "status": "passed; see qualification report",
     "parent_attempt": "public RC1 download/install reached native qualification; native probe exited 1; no Gym/model calls",
     "isolated_checks": {
       "host_vulkan": "NVIDIA L40",
@@ -507,6 +314,7 @@
     "changes": [
       "portable/Dockerfile.common: add NVIDIA EGL headless Vulkan ICD",
       "portable/prepare_runtime.py: emit bounded native failure log before container cleanup"
-    ]
+    ],
+    "qualified_runtime_commit": "fb6ede5b852bd229c3457b23dfd1adfc57a91c34"
   }
 }
