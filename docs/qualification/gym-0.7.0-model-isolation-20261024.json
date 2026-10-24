@@ -1,0 +1,401 @@
+{
+  "schema": "nvgym.compatibility-qualification.v1",
+  "date": "2026-10-24",
+  "implementation_commit": "74bb6c4",
+  "scope": "Published Gym compatibility, exact gateway model transport/native evaluation, and optional strict isolation; measured default cases only.",
+  "gym": {
+    "distribution": "nemo-gym",
+    "version": "0.7.0",
+    "python": "3.13.14",
+    "upstream_release": "https://github.com/NVIDIA-NeMo/Gym/releases/tag/v0.7.0",
+    "admission": "Installed distribution version and module location; no Gym Git commit equality requirement",
+    "execution": "Embedded environment/model HTTP servers with Gym standard RolloutCollectionHelper; no upstream Gym source modifications",
+    "independently_launched_model_server": "Fails closed without the native episode capability verifier"
+  },
+  "models": {
+    "gpt-6.1-sol": {
+      "id": "openai/openai/gpt-6.1-sol",
+      "transport": "Responses"
+    },
+    "nemotron-3.5-super-vl": {
+      "id": "nvidia/nvidia/nemotron-3.5-super-vl",
+      "transport": "Gym official VLLMModel Responses-to-Chat converter and synthesized SSE",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "max_tokens": 8192
+      },
+      "direct_image_and_tool_roundtrip_passed": true,
+      "real_gym_streaming_image_and_tool_roundtrip_passed": true,
+      "responses_only_hints_omitted": [
+        "include=reasoning.encrypted_content",
+        "reasoning.summary"
+      ],
+      "task_images_tools_and_reasoning_effort_preserved": true
+    },
+    "official_hosted_alias": {
+      "id": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "tested": false
+    }
+  },
+  "cpu_validation": {
+    "root_suite": {
+      "passed": 223,
+      "failed": 4,
+      "skipped": 56,
+      "subtests_passed": 10
+    },
+    "environment_repairs": "Install Git LFS and use a short Unix socket temporary path; image-owned authority fixtures require root and the paired source.",
+    "all_four_failed_cases_after_environment_repairs": {
+      "passed": 4,
+      "failed": 0
+    },
+    "changed_version_entrypoint_checks": {
+      "passed": 17,
+      "skipped": 1
+    },
+    "shutdown_and_related_sdk_checks": {
+      "passed": 41,
+      "failed": 0
+    },
+    "nine_environment_sdk_protocols": "Controlled CPU contracts through the same adapter; not nine native simulator reruns.",
+    "initial_misconfigured_runner": {
+      "passed": 172,
+      "failed": 11,
+      "errors": 14,
+      "skipped": 86,
+      "reason": "Authority fixtures ran without root and paired source; this diagnostic run is retained, not counted as a passing suite.",
+      "log_sha256": "f4226aff17e0c1b38a8af4aa02b41d33de23c921b40115bb93b85b88880632da"
+    }
+  },
+  "native_runs": [
+    {
+      "run": "robodojo-sol",
+      "environment": "robodojo",
+      "model": "openai/openai/gpt-6.1-sol",
+      "gym_release": "0.7.0",
+      "isolation": "trusted",
+      "runtime_status": "scored",
+      "reward": 1.0,
+      "passed": true,
+      "scoring_lifecycle_passed": true,
+      "completed_native_grade": true,
+      "model_task_success": true,
+      "model_outcome": "scored",
+      "expected_decision_budget_termination": false,
+      "actor": [
+        {
+          "finished": true,
+          "calls": 14,
+          "has_error": false
+        }
+      ],
+      "captured_model_requests": 14,
+      "sdk_executions": 14,
+      "sdk_trajectories": 5,
+      "native_control_steps": 100,
+      "native_evaluation": [
+        {
+          "complete": true,
+          "step_id": 100,
+          "success": true,
+          "reason": "server_close"
+        }
+      ],
+      "native_outcomes": [
+        {
+          "complete": true,
+          "success": true,
+          "steps": 100
+        }
+      ],
+      "native_cleanup_confirmed": true,
+      "immutable_identities_equal": true,
+      "container_absent": true,
+      "network_absent": true,
+      "prepared_image": "sha256:c38aaac230f34fb98ced5224485cf8979dcef0e37aeb1271008b4e9b3efaa097",
+      "source_files_manifest_sha256": "cf456e1133f6c341479bb8ad6c2516597a866e3db8da133114f08796ff3afc5b"
+    },
+    {
+      "run": "libero-sol",
+      "environment": "libero",
+      "model": "openai/openai/gpt-6.1-sol",
+      "gym_release": "0.7.0",
+      "isolation": "strict",
+      "runtime_status": "scored",
+      "reward": 0.0,
+      "passed": false,
+      "scoring_lifecycle_passed": false,
+      "completed_native_grade": true,
+      "model_task_success": false,
+      "model_outcome": "scored",
+      "expected_decision_budget_termination": false,
+      "actor": [
+        {
+          "finished": false,
+          "calls": 40,
+          "has_error": true
+        }
+      ],
+      "captured_model_requests": 40,
+      "sdk_executions": 27,
+      "sdk_trajectories": 32,
+      "native_control_steps": 300,
+      "native_evaluation": [],
+      "native_outcomes": [
+        {
+          "complete": true,
+          "success": false,
+          "status": "finished",
+          "steps": 300
+        }
+      ],
+      "native_cleanup_confirmed": true,
+      "immutable_identities_equal": true,
+      "container_absent": true,
+      "network_absent": true,
+      "prepared_image": "sha256:9fea41859cf310d70a84ad04df66921bd60766690848b85f5549abce0d88bfcf",
+      "source_files_manifest_sha256": "2e431af192e769534a2f3ecee757f977923a46d4a74f99999d5bc2c43aed8e86"
+    },
+    {
+      "run": "libero-nemotron-before-shutdown-fix",
+      "environment": "libero",
+      "model": "nvidia/nvidia/nemotron-3.5-super-vl",
+      "gym_release": "0.7.0",
+      "isolation": "strict",
+      "runtime_status": "scored",
+      "reward": 0.0,
+      "passed": true,
+      "scoring_lifecycle_passed": true,
+      "completed_native_grade": true,
+      "model_task_success": false,
+      "model_outcome": "scored",
+      "expected_decision_budget_termination": false,
+      "actor": [
+        {
+          "finished": true,
+          "calls": 37,
+          "has_error": false
+        }
+      ],
+      "captured_model_requests": 37,
+      "sdk_executions": 23,
+      "sdk_trajectories": 13,
+      "native_control_steps": 300,
+      "native_evaluation": [],
+      "native_outcomes": [
+        {
+          "complete": true,
+          "success": false,
+          "status": "finished",
+          "steps": 300
+        }
+      ],
+      "native_cleanup_confirmed": true,
+      "immutable_identities_equal": true,
+      "container_absent": true,
+      "network_absent": true,
+      "prepared_image": "sha256:ea39f512f0565954b34ea7f2aeb296a130a2a85e1fb4e99c30a07d8a3e0f806f",
+      "source_files_manifest_sha256": "ea168e68380a9248a9fbb9a1849e72aed9f5d5f5072fa5ce66eab33fc773f64f"
+    },
+    {
+      "run": "libero-nemotron-after-shutdown-fix",
+      "environment": "libero",
+      "model": "nvidia/nvidia/nemotron-3.5-super-vl",
+      "gym_release": "0.7.0",
+      "isolation": "strict",
+      "runtime_status": "scored",
+      "reward": 0.0,
+      "passed": false,
+      "scoring_lifecycle_passed": true,
+      "completed_native_grade": false,
+      "model_task_success": false,
+      "model_outcome": "policy_failure.decision_budget",
+      "expected_decision_budget_termination": true,
+      "actor": [
+        {
+          "finished": false,
+          "calls": 40,
+          "has_error": true
+        }
+      ],
+      "captured_model_requests": 40,
+      "sdk_executions": 7,
+      "sdk_trajectories": 5,
+      "native_control_steps": 112,
+      "native_evaluation": [],
+      "native_outcomes": [
+        {
+          "complete": false,
+          "success": null,
+          "status": "unfinished",
+          "steps": 112
+        }
+      ],
+      "native_cleanup_confirmed": true,
+      "immutable_identities_equal": true,
+      "container_absent": true,
+      "network_absent": true,
+      "prepared_image": "sha256:9d6ce430a739f9d92e8776d909bd8dff4635ed92414008086cdcfd89b4ab4b7d",
+      "source_files_manifest_sha256": "c6813a51a6ed15ee0e8206aa1731fec7d6162705133273fb022679005cd77e8a"
+    },
+    {
+      "run": "robodojo-nemotron",
+      "environment": "robodojo",
+      "model": "nvidia/nvidia/nemotron-3.5-super-vl",
+      "gym_release": "0.7.0",
+      "isolation": "trusted",
+      "runtime_status": "failed",
+      "reward": null,
+      "passed": false,
+      "scoring_lifecycle_passed": false,
+      "completed_native_grade": false,
+      "model_task_success": false,
+      "model_outcome": "policy_failure.decision_budget",
+      "expected_decision_budget_termination": false,
+      "actor": [
+        {
+          "finished": false,
+          "calls": 20,
+          "has_error": true
+        }
+      ],
+      "captured_model_requests": 20,
+      "sdk_executions": 11,
+      "sdk_trajectories": 5,
+      "native_control_steps": 0,
+      "native_evaluation": [
+        {
+          "complete": false,
+          "step_id": 60,
+          "success": false,
+          "reason": "server_close"
+        }
+      ],
+      "native_outcomes": [
+        null
+      ],
+      "native_cleanup_confirmed": true,
+      "immutable_identities_equal": true,
+      "container_absent": true,
+      "network_absent": true,
+      "prepared_image": "sha256:34ed3fb3722acfe7b5bfa179c338a038229d9fe66e73dc1a10e3d559d130cb33",
+      "source_files_manifest_sha256": "e44121261397d49f7b6bf46cfff95b2516c378c740b8b2507442f8e806c161c1"
+    }
+  ],
+  "outcome_interpretation": {
+    "libero_nemotron_completed_grade": "37 calls, 23 SDK executions, 300 controls, completed native grade 0; successful integration/lifecycle, unsuccessful task.",
+    "libero_nemotron_final_image": "40 calls and 112 controls; decision budget exhausted, policy penalty 0, no completed native grade; cleanup and immutable identities confirmed.",
+    "robodojo_nemotron": "20 calls, 11 SDK executions; recorder observed 60 steps, native readback ineligible; no qualified native reward.",
+    "libero_sol": "Completed native grade 0 at 300 controls; actor exhausted 40 calls, so strict normal acceptance is false.",
+    "exemplar_nemotron": "CPU fixture only: 20 calls, 16 executions and 80 fixture controls, audit ok but decision budget exhausted; full fixture acceptance false, no benchmark reward."
+  },
+  "isolation": {
+    "mode": "strict (opt-in)",
+    "ttc": "rootless; unsafe_no_host_isolation=false",
+    "privileged": false,
+    "host_docker_socket_mounted": false,
+    "two_guest_probes": {
+      "passed": true,
+      "host_file_and_proc_root_blocked": true,
+      "listener_positive_control": true,
+      "guest_network_blocked": true,
+      "guest_pid_limit_exhausted_while_peer_healthy": true,
+      "stop_one_guest_while_peer_healthy": true,
+      "guest_storage_limit_bytes": 8589934592
+    },
+    "two_live_evaluation_containers": {
+      "passed": true,
+      "environments": [
+        "libero (native, Sol)",
+        "exemplar (CPU fixture, exact Nemotron)"
+      ],
+      "distinct_gpu_requests": true,
+      "distinct_networks": true,
+      "own_http_positive_controls": true,
+      "peer_http_blocked_both_directions": true,
+      "owned_canary_http_helpers_stopped": true,
+      "container_limits_each": {
+        "cpus": 12,
+        "memory_bytes": 68719476736,
+        "pids": 4096
+      }
+    },
+    "policies": {
+      "ttc-seccomp.json": "839913cdf6c00136e3acde48a1a65418fff5408c610ae96c1a32c2c5d000d687",
+      "ttc.apparmor": "59e4dd4679127642555267370015290360dd6d3468e7af08c81cafd60548a4e5"
+    },
+    "limits": [
+      "Tested on Ubuntu 22.04/kernel 5.15; host user namespaces and AppArmor profile installation required.",
+      "Default trusted mode still requires a dedicated or trusted host.",
+      "Shared kernel/container isolation, not VM isolation or protection from Docker administrators.",
+      "GPU index selection does not reserve or schedule GPUs; operator assigns distinct devices.",
+      "Memory/CPU container bounds inspected; guest PID exhaustion and tmpfs capacity tested.",
+      "Distinct provider account billing/quotas were not tested."
+    ]
+  },
+  "live_sigterm": {
+    "passed": true,
+    "model": "nvidia/nvidia/nemotron-3.5-super-vl",
+    "gym_release": "0.7.0",
+    "isolation": "strict",
+    "live_ttc_before_signal": true,
+    "upstream_request_held": true,
+    "external_model_requests": 0,
+    "shutdown_seconds": 10.342627441999866,
+    "launcher_returncode": 143,
+    "same_image_as_final_normal_run": true,
+    "runtime_status": "interrupted",
+    "reward_absent": true,
+    "forced_collector_stop": false,
+    "sdk_ttc_watchdog_closed": true,
+    "native_cleanup_complete": true,
+    "container_and_network_removed": true,
+    "identities_unchanged": true,
+    "earlier_failed_attempt_retained": true,
+    "fix": "Cancel held model HTTP requests before closing native allocations and embedded servers; bound Uvicorn graceful shutdown."
+  },
+  "historical_nine_environment_baseline": {
+    "path": "sdk-nine-l40-20261024.json",
+    "sha256": "e2e893c4e85d86eebd4a5fdd413c70221c5fef096a6fb4a8993ac42fd23754a2",
+    "unchanged": true,
+    "note": "Historical development-Gym baseline; it is not relabeled as nine native results under Gym 0.7.0."
+  },
+  "evidence": [
+    {
+      "archive": "protocol-isolation-evidence.tar.gz",
+      "sha256": "afaff7865b334b668cdd0d3cf3b210e0dd419183d527a7e78cf5b5f41b47d9a7",
+      "files": 38,
+      "archive_sha256_verified_after_download": true
+    },
+    {
+      "archive": "native-model-evidence-batch1.tar.gz",
+      "sha256": "521336de8c92b451cff1347bf86ef4e9b840d231ae075a050a2846ac2063fe88",
+      "bytes": 1123446955,
+      "files": 3273,
+      "credential_scan_passed": true,
+      "archive_sha256_verified_after_download": true,
+      "manifest_and_every_member_sha256_verified": true
+    },
+    {
+      "archive": "native-model-evidence-batch2.tar.gz",
+      "files": 1296,
+      "bytes": 550986726,
+      "sha256": "0fc7a119ffb3b111b910221dfacfdf4f01d5eacb5ee076ac3ce0982f2bdf2c13",
+      "credential_scan_passed": true,
+      "archive_sha256_verified_after_download": true,
+      "manifest_and_every_member_sha256_verified": true
+    }
+  ],
+  "resource_cleanup": {
+    "containers_networks_gpu_processes_and_active_owned_units_absent": true,
+    "owned_probe_containers_removed": 2,
+    "remote_credential_copy_removed": true,
+    "lease_retirement": {
+      "native_status": "EXPIRED",
+      "release_mode": "CLEAN",
+      "ended_at": "2026-10-24 19:47:51 +0800"
+    }
+  },
+  "remaining_scope": "Nine environments retain their historical native/fixture baseline; this upgrade reran native RoboDojo and LIBERO and the Exemplar CPU fixture. No benchmark-wide success-rate or nine-environment new-model qualification claim."
+}

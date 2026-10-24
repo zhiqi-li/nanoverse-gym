@@ -158,6 +158,8 @@ The rootless probes in `tests/probes/ttc_isolation.py` test two live TTC guests,
 
 ## Pins and scope
 
+See the [Gym 0.7.0/model/isolation qualification](qualification/gym-0.7.0-model-isolation-20261024.json) for this upgrade's real native results, failed attempts, live SIGTERM verification and tested isolation limits. The nine SDK contract checks are CPU tests; they do not replace nine native simulator reruns under the new Gym version.
+
 | Input | Identity |
 | --- | --- |
 | SDK/bridge pair | `sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0` |

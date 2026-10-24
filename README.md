@@ -4,6 +4,8 @@ Run nine Nanoverse SDK environments through NeMo Gym. Nanoverse owns simulation 
 
 The runtime now installs the published **NeMo Gym 0.7.0** package with Python 3.13.14. Admission checks the installed package version and import location; it does not require a Gym Git commit. Native SDK and simulator identities remain recorded for reproducibility.
 
+The [Gym 0.7.0, model and isolation results](docs/qualification/gym-0.7.0-model-isolation-20261024.json) separate completed native grades, model budget failures and lifecycle checks. This upgrade reran native RoboDojo and LIBERO plus the Exemplar CPU fixture; the historical nine-environment baseline remains unchanged.
+
 Use a Linux x86-64 NVIDIA GPU host with working Docker GPU support and NVIDIA Container Toolkit. Qualification uses Production L40 GPUs, one selected GPU per container, 12 CPU cores and a 64 GiB memory limit. Allow space for simulator downloads, assets, Docker layers and retained results; the tested host has 256 GB RAM and a 2.9 TB disk. Other GPU architectures and a minimum total disk capacity have not been qualified.
 
 Download the [source release](https://github.com/zhiqi-li/nanoverse-gym/releases/latest), extract it, and copy `model.env.example` to `model.env`. Supply your own endpoint and key, supporting images and tool calls. The default model is `openai/openai/gpt-6.1-sol` through Responses; `--model-profile nemotron-3.5-super-vl` selects the exact Chat Completions model ID `nvidia/nvidia/nemotron-3.5-super-vl`. Gym's official converter handles its Responses interface and streaming. No host Python, cluster client, private registry or access to our filesystem is required.
