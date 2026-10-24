@@ -17,7 +17,17 @@ NV_BASE_URL=https://your-provider.example/v1
 NV_API_KEY_2=replace-with-your-own-key
 ```
 
-`NV_API_KEY_2` is the runtime's credential variable name. The endpoint must serve the qualified model identifier `openai/openai/gpt-6.1-sol` through the Responses API, with image input and tool calls. Other model profiles are not covered by these results. Keep credentials outside `releases/`, application package directories, datasets and asset caches, and restrict access to the file. The top-level `model.env` shown here is excluded from source packaging. Preparation does not mount them; evaluation mounts them read-only. The launcher preserves your credential file.
+`NV_API_KEY_2` is the runtime's credential variable name. The endpoint must support image input and tool calls. Keep credentials outside `releases/`, application package directories, datasets and asset caches, and restrict access to the file. The top-level `model.env` shown here is excluded from source packaging. Preparation does not mount credentials; evaluation mounts them read-only and preserves the file.
+
+| Model profile | Requested model ID | Upstream API |
+| --- | --- | --- |
+| `gpt-6.1-sol` (default) | `openai/openai/gpt-6.1-sol` | Responses |
+| `nemotron-3.5-super-vl` | `nvidia/nvidia/nemotron-3.5-super-vl` | Chat Completions through Gym's official converter |
+| `nemotron-3.5-super-vl-nim` | `nvidia/nemotron-3.5-super-vl-120b-a12b` | Optional official hosted identity; not covered by the gateway model's results |
+
+For example, add `--model-profile nemotron-3.5-super-vl` to an evaluation command. The gateway and official hosted identities are separate profiles; the launcher does not silently rewrite one to the other. Model API and conversion checks establish transport behavior, not native task success.
+
+For the Chat Completions profiles, the adapter removes the Responses-only encrypted reasoning state request and reasoning-summary display hint before Gym converts the request. It preserves reasoning effort, instructions, images and tool arguments. Responses-native profiles retain those hints. A successful HTTP status alone is insufficient: a streamed `response.failed` is a failed model call.
 
 ## Run an environment
 
@@ -44,7 +54,7 @@ First use is substantial: downloads, installation, native probes and saving a la
 
 ## Packaging and official software
 
-The public common package contains Gym/SDK/bridge code, TTC and guest programs, Python/Node/Codex runtimes and included license files. CUDA comes from a pinned public NVIDIA base. Native code and dependencies are installed from public GitHub/PyPI/NVIDIA sources. RoboCasa365 uses the official public Box asset packs with the accepted full-file checksums; no S3 credentials are needed by the product.
+The public common package contains SDK/bridge code, TTC and guest programs, Python/Node/Codex runtimes and included license files. Preparation installs `nemo-gym==0.7.0` from PyPI in a separate Python 3.13.14 evaluator environment. The evaluator checks both distribution version and module location, so the legacy Gym tree in the original common archive cannot shadow the installed release. CUDA comes from a pinned public NVIDIA base. Native code and dependencies are installed from public GitHub/PyPI/NVIDIA sources. RoboCasa365 uses the official public Box asset packs with the accepted full-file checksums; no S3 credentials are needed by the product.
 
 Isaac Sim/Kit, licensed BEHAVIOR data and prepared native images are absent from the common archive. Isaac components are obtained from official sources after `--accept-isaac-terms`. The prepared image stays local. Consult upstream licenses before redistributing it.
 
@@ -125,14 +135,33 @@ Images, caches, user data, credentials and results are retained. The launcher ne
 
 Retries use a new output directory. Fix a rejected provider credential before retrying; an already prepared image can be reused. No model credential is included in preparation images or public qualification summaries.
 
-TTC uses `outer_task` with `unsafe_no_host_isolation=true`. The Docker container provides the outer boundary; this does not provide isolation between mutually untrusted tenants. Use a dedicated or trusted single-tenant host.
+## Isolation
+
+Each run has its own container, bridge network, output mount and selected GPU. Network cleanup is recorded in `docker-network-cleanup.json`; the launcher checks ownership before removal. No Docker socket is exposed inside a run. Assign different GPUs explicitly for concurrent GPU tenants; `--gpu` selects a device and does not reserve it against other host users.
+
+The default `--isolation trusted` uses TTC's existing `outer_task` envelope with `unsafe_no_host_isolation=true`. Use a dedicated or trusted host in that mode.
+
+`--isolation strict` omits the unsafe TTC flag, uses the supplied seccomp profile and provides an 8 GiB `/tmp` tmpfs for TTC guest storage. Guest storage counts toward the container's memory limit. On an AppArmor host, an operator must first load the supplied profile:
+
+```sh
+sudo apparmor_parser -r portable/security/ttc.apparmor
+./nvgym run libero --prepare --isolation strict \
+    --model-profile nemotron-3.5-super-vl \
+    --credentials ./model.env --output ./strict-run
+```
+
+The host must permit unprivileged user namespaces. The tested policy host is Ubuntu 22.04/kernel 5.15; other host policies may reject nested namespace creation. A strict image is required for strict execution, and neither policy errors nor unsupported host features trigger an unsafe fallback. See [policy provenance and the TTC runtime child profile](../portable/security/NOTICE.md).
+
+The native actor receives a random episode capability for its local Gym model endpoint, not the provider key. The embedded driver binds capability authorization to the owning live episode; wrong, foreign and revoked capabilities are rejected before provider forwarding. Model adapters launched without that binding fail closed. This authority binding is supplied by `scripts.sdk_smoke`, not by an independent model-server process.
+
+The rootless probes in `tests/probes/ttc_isolation.py` test two live TTC guests, host-file/proc access, network reachability, process limits and stopping one guest while its peer continues. They use synthetic canaries and no model credentials. These checks do not establish VM isolation or protection from users who control the host Docker daemon. Native case qualification and model success remain separate checks.
 
 ## Pins and scope
 
 | Input | Identity |
 | --- | --- |
 | SDK/bridge pair | `sha256:d8836d1569a505d4635ee367159c2621930e3f2b55335e73bc9a1b777a5f09a0` |
-| NeMo Gym | `69c2ff3ebd6e7b6c2106f5f8cb1ae5c0f912b8bb` |
+| NeMo Gym | Published `nemo-gym==0.7.0`; package version and import location checked |
 | Default public CUDA base | `12.8.1-cudnn-devel-ubuntu22.04`, digest `61f6c08f2b59036cb935e56d1e31a6b64e3ae2c7ddb86d33fa0b044c7917b719` |
 | RoboTwin public CUDA base | `12.1.1-cudnn8-devel-ubuntu22.04`, digest `cc55d151af1e8e083f3210af753a5cfbcbc5455421531eb0459887026bb4699f` |
 | Common archive | SHA256 `fb0f8b55a27c041c8a44d90d6f3c848a9548ee8a05556c787292c393f1b12041` |

@@ -9,7 +9,7 @@ import asyncio
 import hashlib
 import json
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated, ClassVar, Literal
 
 from fastapi import Body
 from nemo_gym.base_environment_server import BaseEnvironmentServer, BaseEnvironmentServerConfig, CleanupContext
@@ -19,6 +19,8 @@ from nemo_gym.reward_profile import compute_aggregate_metrics
 from nemo_gym.rollout_observability import AgentObservationBundle
 from nemo_gym.server_utils import apply_rollout_prefix, get_server_url, is_nemo_gym_fastapi_entrypoint
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, PrivateAttr, model_validator
+
+from environment_servers.nanoverse_sdk.models import model_profile
 
 from environment_servers.nanoverse_sdk.native import (
     BRIDGE_ROOT,
@@ -82,9 +84,14 @@ class FixtureResult(BaseModel):
 NativeResult = Annotated[NativeScoredResult | NativePolicyLimitResult | FixtureResult, Field(discriminator="kind")]
 
 
+class NativeFailureEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    ng_agent_observations: AgentObservationBundle
+    evidence_id: str
+
+
 class NativeSDKFailure(EpisodeFailure):
-    agent_observations: AgentObservationBundle | None = None
-    evidence_id: str | None = None
+    partial_response: NativeFailureEvidence | None = None
 
 
 class NativeSDKResponse(BaseEpisodeResponse[NativeResult]):
@@ -96,13 +103,14 @@ class NativeSDKConfig(BaseEnvironmentServerConfig):
     registry_path: Path
     output_root: Path
     model_server: ModelServerRef
-    model_id: Literal[MODEL_ID] = MODEL_ID
+    model_id: str = MODEL_ID
     token_capture: bool = False
     native_root: Path = NATIVE_ROOT
     bridge_root: Path = BRIDGE_ROOT
 
     @model_validator(mode="after")
     def local_owner(self):
+        model_profile(self.model_id)
         if (self.num_workers or 1) != 1:
             raise ValueError("Native runtime ownership requires num_workers=1")
         if not all(path.is_absolute() for path in (self.output_root, self.native_root, self.bridge_root)):
@@ -142,7 +150,7 @@ class NativeSDKEnvironmentServer(BaseEnvironmentServer[NativeSDKRequest, NativeS
     config: NativeSDKConfig
     request_model = NativeSDKRequest
     response_model = NativeSDKResponse
-    checkpoint_boundaries = False
+    checkpoint_boundaries: ClassVar[bool] = False
     _registry: CaseRegistry = PrivateAttr()
     _allocations: dict[str, EpisodeProcess] = PrivateAttr(default_factory=dict)
 
@@ -152,11 +160,12 @@ class NativeSDKEnvironmentServer(BaseEnvironmentServer[NativeSDKRequest, NativeS
         self._registry.validate_deployment(self.config.native_root, self.config.bridge_root)
         self.config.output_root.mkdir(mode=0o700, parents=True, exist_ok=True)
 
-    async def native_request(self, capture_key: str, bearer: str) -> None:
+    async def native_request(self, capture_key: str, bearer: str) -> bool:
         evidence_id = hashlib.sha256(capture_key.encode()).hexdigest()[:16]
         owners = [owner for owner in self._allocations.values() if owner.paths.root.name == evidence_id]
         if len(owners) == 1:
-            await owners[0].native_request(bearer)
+            return await owners[0].native_request(bearer)
+        return False
 
     async def run(self, request: NativeSDKRequest, cleanup: CleanupContext) -> NativeSDKResponse:
         owner = None
@@ -257,8 +266,9 @@ class NativeSDKEnvironmentServer(BaseEnvironmentServer[NativeSDKRequest, NativeS
                 failure=NativeSDKFailure(
                     failure_reason=reason[:2000],
                     terminal=terminal,
-                    agent_observations=observations,
-                    evidence_id=owner.paths.root.name if owner else None,
+                    partial_response=NativeFailureEvidence(
+                        ng_agent_observations=observations, evidence_id=owner.paths.root.name
+                    ) if owner else None,
                 ),
             )
 

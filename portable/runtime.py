@@ -14,6 +14,8 @@ from environment_servers.nanoverse_sdk.native import CaseRegistry
 from portable.behavior_data import validate_data
 from portable.native_admission import verify_admission
 from portable.native_host import paired_inventory
+from portable.gym_version import require_gym_release
+from environment_servers.nanoverse_sdk.models import PROFILES
 
 ROOT = Path('/opt/nvgym')
 
@@ -43,6 +45,7 @@ def main():
     parser.add_argument('--output-dir', type=Path, default=Path('/output'))
     parser.add_argument('--data-root', type=Path)
     parser.add_argument('--credentials-file', type=Path, default=Path('/run/secrets/model.env'))
+    parser.add_argument('--model-profile', choices=PROFILES, default='gpt-6.1-sol')
     args = parser.parse_args()
     metadata = json.loads((ROOT / 'deployment/runtime.json').read_text())
     if metadata['environment'] != args.environment:
@@ -63,6 +66,14 @@ def main():
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     try:
+        report['gym_release'] = require_gym_release()
+        report['isolation'] = metadata.get('isolation', 'trusted')
+        ttc_manifest = json.loads((ROOT / 'deployment/ttc-manifest.json').read_text())
+        if ttc_manifest.get('unsafe_no_host_isolation') is not (report['isolation'] != 'strict'):
+            raise ValueError('TTC isolation manifest differs from the prepared runtime')
+        profile = PROFILES[args.model_profile]
+        report['model_profile'] = profile.name
+        report['model'] = profile.model
         verify_release(metadata['provenance'])
         admission = ROOT / 'deployment/native-admission.json'
         if hashlib.sha256(admission.read_bytes()).hexdigest() != metadata['provenance']['native_admission_sha256']:
@@ -106,6 +117,7 @@ def main():
                    '--credentials-file', str(args.credentials_file.resolve(strict=True)),
                    '--native-root', str(ROOT / 'code/nanoverse'),
                    '--bridge-root', str(ROOT / 'code/ember_bridge'),
+                   '--model', profile.model,
                    '--episode-seconds', str(metadata['episode_seconds'])]
         process = subprocess.Popen(command, env=dict(os.environ))
         code = process.wait(timeout=metadata['episode_seconds'] + 180)

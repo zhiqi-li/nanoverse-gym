@@ -508,6 +508,7 @@ def test_runtime_checks_identity_after_collector_cleanup(tmp_path, monkeypatch, 
                 'provenance': {'release_input': {'native_input': {'kind': 'fixture'}},
                                'native_admission_sha256': digest(admission)}}
     (deployment / 'runtime.json').write_text(json.dumps(metadata))
+    (deployment / 'ttc-manifest.json').write_text(json.dumps({'unsafe_no_host_isolation': True}))
     checks = []
 
     class Registry:

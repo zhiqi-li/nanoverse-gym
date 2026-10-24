@@ -14,7 +14,6 @@ from uuid import uuid4
 
 import uvicorn
 from dotenv import dotenv_values
-from nemo_gym import server_utils
 from nemo_gym.rollout_collection import RolloutCollectionConfig, RolloutCollectionHelper
 from nemo_gym.server_utils import (
     BaseServerConfig,
@@ -48,6 +47,20 @@ class EmbeddedServer(uvicorn.Server):
         return nullcontext()
 
 
+async def shutdown(servers, tasks, environment, shared):
+    for server in servers.values():
+        server.should_exit = True
+    requests = tuple(servers['model'].server_state.tasks)
+    for request in requests:
+        request.cancel()
+    try:
+        await asyncio.gather(*requests, return_exceptions=True)
+        await asyncio.gather(*(owner.aclose() for owner in tuple(environment._allocations.values())))
+    finally:
+        await asyncio.gather(*tasks, return_exceptions=True)
+        await shared.close()
+
+
 async def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--registry", type=Path, required=True)
@@ -66,6 +79,8 @@ async def main():
     output.chmod(0o700)
     registry = CaseRegistry.load(args.registry.resolve())
     case = next(case for case in registry.cases if case.case_id == args.case_id)
+    from environment_servers.nanoverse_sdk.models import model_profile
+    profile = model_profile(args.model)
     values = dotenv_values(args.credentials_file, interpolate=False)
     api_key = os.environ.get(args.key_name) or values[args.key_name]
     base_url = os.environ.get(args.base_url_key) or values[args.base_url_key]
@@ -77,9 +92,10 @@ async def main():
         name: {"name": name, "host": "127.0.0.1", "port": ports[name], "entrypoint": "app.py"}
         for name in ("model", "sdk")
     }
+    adapter_name = 'nanoverse_sdk_openai' if profile.transport == 'responses' else 'nanoverse_sdk_nemotron'
     config = {
         "head_server": {"host": "127.0.0.1", "port": ports["head"]},
-        "model": {"responses_api_models": {"nanoverse_sdk_openai": common["model"]}},
+        "model": {"responses_api_models": {adapter_name: common["model"]}},
         "sdk": {"environment_servers": {"nanoverse_sdk": common["sdk"]}},
         "observability_enabled": True,
         "model_call_capture_dir": str(output / "model-calls"),
@@ -89,17 +105,28 @@ async def main():
         head_server_config=BaseServerConfig(**config["head_server"]),
         global_config_dict=OmegaConf.create(config),
     )
-    model = NanoverseSDKOpenAIModelServer(
-        config=SimpleModelServerConfig(
+    if profile.transport == 'responses':
+        model_class = NanoverseSDKOpenAIModelServer
+        model_config = SimpleModelServerConfig(
             **common["model"],
             openai_base_url=base_url,
             openai_api_key=api_key,
             openai_model=args.model,
-            upstream_max_num_tries=1,
             max_http_attempts=1,
-            max_rate_limit_wait_seconds=0,
-            upstream_request_timeout_seconds=180,
-        ),
+        )
+    else:
+        from responses_api_models.nanoverse_sdk_nemotron.app import NanoverseSDKNemotronModelServer
+        from responses_api_models.vllm_model.app import VLLMModelConfig
+        model_class = NanoverseSDKNemotronModelServer
+        model_config = VLLMModelConfig(
+            **common['model'], base_url=base_url, api_key=api_key, model=args.model,
+            return_token_id_information=False, uses_reasoning_parser=True,
+            is_responses_native=False, reasoning_field='reasoning_content',
+            replace_developer_role_with_system=True,
+            sampling_overrides={'temperature': 0.6, 'top_p': 0.95, 'max_tokens': 8192},
+        )
+    model = model_class(
+        config=model_config,
         server_client=client,
     )
     environment = NativeSDKEnvironmentServer(
@@ -130,11 +157,13 @@ async def main():
         server.setup_liveness(app)
         server.setup_exception_middleware(app)
         server.setup_cancellation_middleware(app)
-        server_utils.install_request_context_isolation(app)
+        from environment_servers.nanoverse_sdk.context import RequestContextIsolation
+        app.add_middleware(RequestContextIsolation)
         apps[name] = app
     servers = {
         name: EmbeddedServer(
-            uvicorn.Config(app, host="127.0.0.1", port=ports[name], log_level="warning", access_log=False)
+            uvicorn.Config(app, host="127.0.0.1", port=ports[name], log_level="warning", access_log=False,
+                           timeout_graceful_shutdown=5)
         )
         for name, app in apps.items()
     }
@@ -174,14 +203,11 @@ async def main():
         (output / "collector-summary.json").write_text(json.dumps(report, indent=2) + "\n")
         print(json.dumps(report), flush=True)
     finally:
-        for server in servers.values():
-            server.should_exit = True
-        await asyncio.gather(*tasks, return_exceptions=True)
-        await shared.close()
-        if server_utils._GLOBAL_AIOHTTP_CONTROL_CLIENT is not None:
-            await server_utils._GLOBAL_AIOHTTP_CONTROL_CLIENT.close()
-        for sock in sockets.values():
-            sock.close()
+        try:
+            await shutdown(servers, tasks, environment, shared)
+        finally:
+            for sock in sockets.values():
+                sock.close()
 
 
 if __name__ == "__main__":

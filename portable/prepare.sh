@@ -8,6 +8,8 @@ package=$4
 accept=$5
 assets_cache=${6:-}
 environment=${7:-robodojo}
+isolation=${8:-trusted}
+case "$isolation" in trusted|strict) ;; *) echo 'Unknown isolation mode' >&2; exit 2 ;; esac
 case "$environment" in
     robodojo|roboforge|robolab|behavior1k) [ "$accept" = yes ] || { echo 'Official preparation requires --accept-isaac-terms' >&2; exit 2; } ;;
     exemplar|libero|robocasa365|robotwin|molmospaces) ;;
@@ -95,7 +97,7 @@ else
     docker build --provenance=false --iidfile "$context/common-image" "$context" >&2
 fi
 common_image=$(cat "$context/common-image")
-prepared=nanoverse-gym-$environment:${common_image#sha256:}
+prepared=nanoverse-gym-$environment:${common_image#sha256:}-$isolation
 cache_identity=
 if [ "$environment" = molmospaces ] && [ -n "$assets_cache" ]; then
     fetch=$owner-assets-identity
@@ -119,8 +121,8 @@ if image=$(docker image inspect "$prepared" --format '{{.Id}} {{index .Config.La
     exit 0
 fi
 preparation=$owner-runtime
-set -- --entrypoint /opt/nvgym/bootstrap/bin/python "$common_image" \
-    -B -m portable.prepare_runtime --environment "$environment" --accept-isaac-terms
+set -- --entrypoint /opt/nvgym/evaluator/bin/python "$common_image" \
+    -B -m portable.prepare_runtime --environment "$environment" --isolation "$isolation" --accept-isaac-terms
 if [ -n "$assets_cache" ]; then
     set -- --mount "type=bind,source=$assets_cache,target=/input-assets,readonly" \
         "$@" --assets-cache /input-assets
@@ -140,8 +142,9 @@ wait "$attached" || true
 [ "$(docker inspect "$preparation" --format '{{.State.Status}}')" = exited ] || exit 1
 code=$(docker inspect "$preparation" --format '{{.State.ExitCode}}')
 [ "$code" -eq 0 ] || exit "$code"
-set -- --change 'ENTRYPOINT ["/opt/nvgym/runtime/python/bin/python3.13", "-B", "-m", "portable.runtime"]' \
-    --change 'CMD []' --change "LABEL com.nvidia.nanoverse-gym.prepared=$common_image"
+set -- --change 'ENTRYPOINT ["/opt/nvgym/evaluator/bin/python", "-B", "-m", "portable.runtime"]' \
+    --change 'CMD []' --change "LABEL com.nvidia.nanoverse-gym.prepared=$common_image" \
+    --change "LABEL com.nvidia.nanoverse-gym.isolation=$isolation"
 if [ -n "$cache_identity" ]; then
     set -- "$@" --change "LABEL com.nvidia.nanoverse-gym.assets-cache=$cache_identity"
 fi

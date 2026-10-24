@@ -203,7 +203,12 @@ def install(wheel, *, environment='robodojo', options=None, resume=False,
     identity = wheel_identity(wheel)
     if identity['revision'] != PAIR:
         raise ValueError('Installer wheel differs from the accepted paired revision')
+    transport = None
     recipe = importlib.import_module(load_catalog()[environment].installer)
+    if environment == 'libero':
+        from portable.libero_transport import TRANSPORT, public_recipe
+        recipe = public_recipe(recipe)
+        transport = TRANSPORT
     if environment == 'molmospaces':
         from portable.molmo_public import public_recipe
         recipe = public_recipe(recipe, assets_cache)
@@ -222,7 +227,6 @@ def install(wheel, *, environment='robodojo', options=None, resume=False,
     if environment in ('robodojo', 'roboforge') and (recipe.SPEC['source_commit'] != SOURCE_REVISION
                                      or recipe.SPEC['assets_commit'] != REVISION):
         raise ValueError('Registered official source pins differ')
-    transport = None
     if assets_cache is not None and environment == 'robodojo':
         from portable.robodojo_assets import cached_recipe
         recipe, transport = cached_recipe(recipe, assets_cache,

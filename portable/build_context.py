@@ -10,6 +10,7 @@ from pathlib import Path
 
 from environment_servers.nanoverse_sdk.native import SUPPORTED_ENVIRONMENTS
 from portable.behavior_data import source_contract
+from portable.gym_version import GYM_VERSION
 from portable.release import ReleaseInput, absolute, digest, verified_source
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,7 +69,7 @@ def main():
     parser.add_argument('--native-root', type=Path, required=True)
     parser.add_argument('--bridge-root', type=Path, required=True)
     parser.add_argument('--gym-root', type=Path, required=True)
-    parser.add_argument('--gym-commit', default='69c2ff3ebd6e7b6c2106f5f8cb1ae5c0f912b8bb')
+    parser.add_argument('--gym-version', choices=(GYM_VERSION,), default=GYM_VERSION)
     parser.add_argument('--gym-site', type=Path)
     parser.add_argument('--gym-python-prefix', type=Path, default=Path(sys.base_prefix))
     parser.add_argument('--ttc-manifest', type=Path, required=True)
@@ -202,7 +203,7 @@ def main():
         'environment': release.environment, 'episode_seconds': release.episode_seconds,
         'config': release.config, 'case': release.case,
         'provenance': {'scope': 'release candidate; public availability not qualified',
-                       'gym_commit': args.gym_commit,
+                       'gym_version': args.gym_version,
                        'native_pair': json.loads((args.native_root / 'nanoverse/_revision.json').read_text()),
                        'ttc': manifest['ttc']['sha256'], 'ttcd': manifest['ttcd']['sha256'],
                        'guest_archive': manifest['image']['sha256'], 'node': digest(args.node),

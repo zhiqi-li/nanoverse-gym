@@ -32,5 +32,13 @@ RUN /opt/nvgym/bootstrap/bin/python -B -c \
     && rm -r /tmp/nanoverse-wheel
 RUN /opt/nvgym/bootstrap/bin/python -B -c \
     "import importlib; from portable.official_install import OWNERS,PAIR; from portable.native_inventory import digest; from nanoverse.environment.paths import revision; assert revision()==PAIR; assert all(digest(importlib.import_module(name).__file__)==expected for name,expected in OWNERS.items())"
+ENV UV_PYTHON_INSTALL_DIR=/opt/nvgym/evaluator-python
+RUN /opt/nvgym/bootstrap/bin/uv python install 3.13.14 \
+    && /opt/nvgym/bootstrap/bin/uv venv --python 3.13.14 --managed-python /opt/nvgym/evaluator \
+    && /opt/nvgym/bootstrap/bin/uv pip install --python /opt/nvgym/evaluator/bin/python \
+        -r /opt/nvgym/gym/portable/gym-requirements.txt \
+    && /opt/nvgym/bootstrap/bin/uv pip install --python /opt/nvgym/evaluator/bin/python --no-deps \
+        /opt/nvgym/deployment/wheels/nanoverse-0.1.0-py3-none-any.whl
+ENV PYTHONPATH=/opt/nvgym/gym
 WORKDIR /opt/nvgym/gym
-ENTRYPOINT ["/opt/nvgym/runtime/python/bin/python3.13", "-B", "-m", "portable.runtime"]
+ENTRYPOINT ["/opt/nvgym/evaluator/bin/python", "-B", "-m", "portable.runtime"]
