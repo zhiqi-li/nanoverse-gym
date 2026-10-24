@@ -1,1 +1,1 @@
-nemo-gym @ git+https://github.com/NVIDIA-NeMo/Gym.git@69c2ff3ebd6e7b6c2106f5f8cb1ae5c0f912b8bb
+nemo-gym==0.7.0

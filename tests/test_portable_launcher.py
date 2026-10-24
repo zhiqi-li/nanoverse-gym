@@ -52,7 +52,7 @@ printf '%s\n' sha256:prepared-candidate
         result = self.launch(credential)
         self.assertEqual(result.returncode, 75, result.stderr)
         self.assertEqual(self.arguments.read_text().splitlines(),
-                         [str(self.root), '0', str(self.root / 'cache'), '', 'yes', '', 'robodojo'])
+                         [str(self.root), '0', str(self.root / 'cache'), '', 'yes', '', 'robodojo', 'trusted'])
         self.assertEqual(self.calls.read_text().splitlines(),
                          ['info', 'image inspect sha256:prepared-candidate',
                           'pull sha256:prepared-candidate'])
@@ -87,7 +87,7 @@ printf '%s\n' sha256:prepared-candidate
         result = self.launch(credential, cache)
         self.assertEqual(result.returncode, 75, result.stderr)
         arguments = self.arguments.read_text().splitlines()
-        self.assertEqual(arguments, [str(self.root), '0', str(self.root / 'cache'), '', 'yes', str(cache), 'robodojo'])
+        self.assertEqual(arguments, [str(self.root), '0', str(self.root / 'cache'), '', 'yes', str(cache), 'robodojo', 'trusted'])
         self.assertNotIn(str(credential), arguments)
 
     def test_credentials_inside_asset_cache_are_not_mounted_for_preparation(self):
@@ -100,6 +100,34 @@ printf '%s\n' sha256:prepared-candidate
         self.assertIn('Keep model credentials outside the asset cache', result.stderr)
         self.assertFalse(self.arguments.exists())
         self.assertEqual(self.calls.read_text().splitlines(), ['info'])
+
+    def test_strict_mode_rejects_a_trusted_image_before_mounting_credentials(self):
+        credential = self.root / 'model.env'
+        credential.write_text('synthetic-credential\n')
+        docker = self.root / 'tools/docker'
+        docker.write_text('''#!/bin/sh
+printf '%s\n' "$*" >> "$DOCKER_CALLS"
+case "$1" in
+  info) exit 0 ;;
+  image)
+    case "$*" in
+      *com.nvidia.nanoverse-gym.isolation*) printf 'trusted\n' ;;
+      *) printf 'sha256:synthetic-image\n' ;;
+    esac
+    exit 0 ;;
+esac
+exit 99
+''')
+        result = subprocess.run(
+            ['/bin/sh', str(self.root / 'nvgym'), 'run', 'exemplar',
+             '--image', 'synthetic-image', '--isolation', 'strict',
+             '--credentials', str(credential), '--output', str(self.root / 'output')],
+            env=self.environment, capture_output=True, text=True, timeout=15,
+        )
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertIn('Strict isolation requires a prepared strict image', result.stderr)
+        self.assertFalse((self.root / 'output').exists())
+        self.assertNotIn('create ', self.calls.read_text())
 
 
 if __name__ == '__main__':

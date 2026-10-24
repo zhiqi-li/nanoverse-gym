@@ -14,6 +14,7 @@ from portable.native_inventory import digest
 from portable.official_install import INSTALLERS, OUTPUT, PAIR, PUBLIC_BASE, public_base
 from portable.official_install import ROOT as NATIVE_ROOT
 from portable.release import ReleaseInput, verified_source
+from portable.gym_version import GYM_VERSION
 
 ROOT = Path('/opt/nvgym')
 ACCEPTED_RELEASE_SHA256 = '87c4339072b93d3420f062c373069b3070e45880012beb72df2db786f157fae3'
@@ -178,7 +179,7 @@ def stage_forge_task(inputs):
 
 def release_inventory(root):
     files = {}
-    for name in ('code', 'runtime', 'bootstrap', 'gym', 'inputs', 'deployment', 'tasks'):
+    for name in ('code', 'runtime', 'bootstrap', 'evaluator', 'evaluator-python', 'gym', 'inputs', 'deployment', 'tasks'):
         for path in sorted((root / name).rglob('*')):
             relative = str(path.relative_to(root))
             if relative in {'deployment/runtime.json', 'deployment/release-files.json'}:
@@ -191,7 +192,7 @@ def release_inventory(root):
     return files
 
 
-def prepare(*, environment='robodojo', accept_isaac_terms=False,
+def prepare(*, environment='robodojo', accept_isaac_terms=False, isolation='trusted',
             installed_descriptor_sha256=None, assets_cache=None):
     from portable.native_admission import verify_admission
     from portable.native_host import CLEAN_ENV, PROBE, set_venv_home
@@ -204,6 +205,8 @@ def prepare(*, environment='robodojo', accept_isaac_terms=False,
     metadata_path = deployment / 'runtime.json'
     if metadata_path.exists():
         metadata = json.loads(metadata_path.read_text())
+        if metadata.get('isolation', 'trusted') != isolation:
+            raise ValueError('Prepared runtime isolation differs from the selected mode')
         if (metadata.get('environment') != environment
                 or metadata.get('provenance', {}).get('release_input', {}).get(
                     'native_input', {}).get('kind') != ('fixture' if environment == 'exemplar' else 'installed_software')):
@@ -246,14 +249,20 @@ def prepare(*, environment='robodojo', accept_isaac_terms=False,
         raise ValueError('Installed software selects a different environment')
     release = derive_release(ROOT / 'inputs' / environment, deployment / 'release-inputs',
                               authority.get('descriptor_sha256'), fixture_python=authority.get('fixture_python'))
+    if isolation not in ('trusted', 'strict'):
+        raise ValueError('Unknown isolation mode')
+    ttc_manifest_path = deployment / 'ttc-manifest.json'
+    ttc_manifest = json.loads(ttc_manifest_path.read_text())
+    ttc_manifest['unsafe_no_host_isolation'] = isolation != 'strict'
+    ttc_manifest_path.write_text(json.dumps(ttc_manifest, indent=2)+'\n')
     files = release_inventory(ROOT)
     inventory_path = deployment / 'release-files.json'
     inventory_path.write_text(json.dumps(files, sort_keys=True))
     ttc = json.loads((deployment / 'ttc-manifest.json').read_text())
-    metadata = {'environment': release.environment, 'episode_seconds': release.episode_seconds,
+    metadata = {'environment': release.environment, 'episode_seconds': release.episode_seconds, 'isolation': isolation,
                 'config': release.config, 'case': release.case,
                 'provenance': {'scope': 'operator-owned official-source runtime',
-                               'gym_commit': '69c2ff3ebd6e7b6c2106f5f8cb1ae5c0f912b8bb',
+                               'gym_version': GYM_VERSION,
                                'native_pair': {'commit': PAIR},
                                'release_files_sha256': digest(inventory_path),
                                'ttc': ttc['ttc']['sha256'], 'ttcd': ttc['ttcd']['sha256'],
@@ -268,7 +277,7 @@ def prepare(*, environment='robodojo', accept_isaac_terms=False,
     process_env = {'PATH': '/opt/nvgym/deployment:/opt/nvgym/runtime/python/bin:'
                            '/usr/local/bin:/usr/bin:/bin',
                    'LANG': 'C.UTF-8', 'PYTHONDONTWRITEBYTECODE': '1',
-                   'PYTHONPATH': '/opt/nvgym/gym:/opt/nvgym/runtime/site:/opt/nvgym/runtime/gym'}
+                   'PYTHONPATH': '/opt/nvgym/gym'}
     python = release.native['python']
     subprocess.run([sys.executable, '-B', '-m', 'portable.native_admission', 'prepare'],
                    cwd=ROOT / 'gym', env=process_env, check=True)
@@ -299,11 +308,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--environment', choices=['exemplar', 'robodojo', *INSTALLERS], default='robodojo')
     parser.add_argument('--accept-isaac-terms', action='store_true')
+    parser.add_argument('--isolation', choices=['trusted', 'strict'], default='trusted')
     parser.add_argument('--installed-descriptor-sha256')
     parser.add_argument('--assets-cache', type=Path)
     args = parser.parse_args()
     try:
         result = prepare(environment=args.environment, accept_isaac_terms=args.accept_isaac_terms,
+                         isolation=args.isolation,
                          installed_descriptor_sha256=args.installed_descriptor_sha256,
                          assets_cache=args.assets_cache)
     except Exception:

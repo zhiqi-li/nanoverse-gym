@@ -1,3 +1,5 @@
+# Schema reference. scripts.sdk_smoke binds the live episode capability verifier;
+# an independently launched model adapter rejects requests without that binding.
 observability_enabled: true
 model_call_capture_dir: /tmp/nvgym-model-calls
 

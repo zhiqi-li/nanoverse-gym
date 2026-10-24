@@ -161,7 +161,7 @@ class OperatorCase(BaseModel):
     runtime_env: dict[str, str] = Field(default_factory=dict)
     native_seconds: PositiveFloat = Field(default=600, allow_inf_nan=False)
     model_calls: PositiveInt = 40
-    cleanup_seconds: PositiveFloat = Field(default=15, allow_inf_nan=False)
+    cleanup_seconds: PositiveFloat = Field(default=60, allow_inf_nan=False)
     allocation_id: str | None = None
     evidence: EvidenceContract = Field(default_factory=EvidenceContract)
     _template: dict[str, Any] | None = PrivateAttr(default=None)
@@ -324,21 +324,23 @@ class EpisodeProcess:
     _cleanup_deadline: float | None = None
     _fallback_sent: bool = False
 
-    async def native_request(self, bearer: str) -> None:
+    async def native_request(self, bearer: str) -> bool:
         if self._closing or self.closed:
-            return
+            return False
         async with self._lock:
             if (
-                self.closed or self._closing or self._request_seen or not self._capability
+                self.closed or self._closing or not self._capability
                 or not secrets.compare_digest(bearer, self._capability)
                 or self.process is None or self.process.returncode is not None
             ):
-                return
-            self._request_seen = True
-            self._harness_stop = HarnessStop.bind(
-                self.process.pid, self._driver_command, self._cli_command,
-                (*self.case._template["harness_command"], str(self.paths.native / "actor/input.json")),
-            )
+                return False
+            if not self._request_seen:
+                self._harness_stop = HarnessStop.bind(
+                    self.process.pid, self._driver_command, self._cli_command,
+                    (*self.case._template["harness_command"], str(self.paths.native / "actor/input.json")),
+                )
+                self._request_seen = True
+            return True
 
     def retire_stop(self) -> None:
         self._capability = ""
@@ -554,7 +556,6 @@ def observe_actor(owner: EpisodeProcess, *, invocation_id: str, model: ModelServ
     invocation = AgentInvocation(
         invocation_id=invocation_id,
         status="completed" if receipt.get("finished") is True else "failed" if receipt.get("error") else "unknown",
-        stop_reason=receipt.get("error"),
         model_calls=list(refs.values()),
         duration_ms=seconds * 1000
         if type(seconds) in (int, float) and math.isfinite(seconds) and seconds >= 0

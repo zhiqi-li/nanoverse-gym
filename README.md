@@ -1,10 +1,14 @@
 # Nanoverse SDK for NeMo Gym
 
-Run nine Nanoverse SDK environments through NeMo Gym. Nanoverse owns simulation and native grading; GPT-6.1 Sol writes SDK programs that execute through TTC. The [qualification record](docs/qualification/sdk-nine-l40-20261024.json) lists each tested case, actual outcome, source identity and normal/SIGTERM evidence. Check its status: preparation or an import check alone is not qualification.
+Run nine Nanoverse SDK environments through NeMo Gym. Nanoverse owns simulation and native grading; the selected model writes SDK programs that execute through TTC. The [nine-case qualification record](docs/qualification/sdk-nine-l40-20261024.json) preserves the original GPT-6.1 Sol baseline, including its Gym source identity and normal/SIGTERM evidence. Preparation or an import check alone is not qualification.
+
+The runtime now installs the published **NeMo Gym 0.7.0** package with Python 3.13.14. Admission checks the installed package version and import location; it does not require a Gym Git commit. Native SDK and simulator identities remain recorded for reproducibility.
+
+The [Gym 0.7.0, model and isolation results](docs/qualification/gym-0.7.0-model-isolation-20261024.json) separate completed native grades, model budget failures and lifecycle checks. This upgrade reran native RoboDojo and LIBERO plus the Exemplar CPU fixture; the historical nine-environment baseline remains unchanged.
 
 Use a Linux x86-64 NVIDIA GPU host with working Docker GPU support and NVIDIA Container Toolkit. Qualification uses Production L40 GPUs, one selected GPU per container, 12 CPU cores and a 64 GiB memory limit. Allow space for simulator downloads, assets, Docker layers and retained results; the tested host has 256 GB RAM and a 2.9 TB disk. Other GPU architectures and a minimum total disk capacity have not been qualified.
 
-Download the [source release](https://github.com/zhiqi-li/nanoverse-gym/releases/latest), extract it, and copy `model.env.example` to `model.env`. Fill in your own Responses API endpoint and key. The qualified profile requires images, tool calls and the model identifier `openai/openai/gpt-6.1-sol`. No host Python, cluster client, private registry or access to our filesystem is required.
+Download the [source release](https://github.com/zhiqi-li/nanoverse-gym/releases/latest), extract it, and copy `model.env.example` to `model.env`. Supply your own endpoint and key, supporting images and tool calls. The default model is `openai/openai/gpt-6.1-sol` through Responses; `--model-profile nemotron-3.5-super-vl` selects the exact Chat Completions model ID `nvidia/nvidia/nemotron-3.5-super-vl`. Gym's official converter handles its Responses interface and streaming. No host Python, cluster client, private registry or access to our filesystem is required.
 
 ```sh
 ./nvgym run robodojo --prepare --accept-isaac-terms \
@@ -39,6 +43,6 @@ Isaac Sim/Kit and prepared native images are not redistributed by this project. 
 
 Results include `summary.json`, NeMo Gym metrics, model-call captures, SDK executions, native trajectories and cleanup receipts. Normal exit and live SIGTERM shut down native/TTC processes and remove the owned run container. Prepared images, download caches, user data and results remain available for reuse. Provider errors, unknown native outcomes and failed software checks do not become scored successes.
 
-TTC uses the existing `outer_task` mode with `unsafe_no_host_isolation=true`. Use a dedicated or trusted single-tenant host; this configuration does not isolate mutually untrusted tenants.
+Each evaluation receives its own Docker bridge network and removes it during cleanup. The default `--isolation trusted` retains TTC's `outer_task` mode with `unsafe_no_host_isolation=true` and requires a trusted host. Optional `--isolation strict` uses rootless TTC, the supplied seccomp/AppArmor policies and an 8 GiB temporary filesystem for guest storage. It requires host user-namespace support and one-time AppArmor policy installation on AppArmor hosts; see [isolation setup and limits](docs/portable.md#isolation). A strict request fails rather than switching to a permissive policy.
 
-See [installation, data layouts and qualification limits](docs/portable.md). The adapters live in `environment_servers/nanoverse_sdk` and `responses_api_models/nanoverse_sdk_openai`; Gym configuration is under `environments/nanoverse_sdk`. This is a standalone integration repository, not a claim of inclusion in NVIDIA-NeMo/Gym upstream.
+See [installation, data layouts and qualification limits](docs/portable.md). The environment adapter lives in `environment_servers/nanoverse_sdk`; model adapters are under `responses_api_models`. The configuration schema reference is under `environments/nanoverse_sdk`. The embedded `scripts.sdk_smoke` driver binds live episode capabilities and runs Gym's standard collector. Independently launched model adapters reject requests without that binding. This is a standalone integration repository, not a claim of inclusion in NVIDIA-NeMo/Gym upstream.

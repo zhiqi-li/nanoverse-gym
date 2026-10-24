@@ -8,6 +8,9 @@ Usage: ./nvgym list
        ./nvgym run ENV --credentials FILE --output DIRECTORY [--data DIRECTORY] [--image IMAGE] [--gpu ID]
        ./nvgym run ENV --prepare [--accept-isaac-terms] --credentials FILE --output DIRECTORY [--common-package FILE]
 
+Model selection: --model-profile gpt-6.1-sol|nemotron-3.5-super-vl|nemotron-3.5-super-vl-nim
+Isolation: --isolation trusted|strict (strict requires host user namespaces and the supplied AppArmor profile on AppArmor hosts)
+
 Runs a packaged SDK environment with Docker. The output directory must be new.
 --image selects a locally prepared release candidate until public images are published.
 EOF
@@ -31,6 +34,8 @@ credentials=
 output=
 data=
 gpu=0
+model_profile=gpt-6.1-sol
+isolation=trusted
 prepare=no
 accept=no
 package=
@@ -49,6 +54,8 @@ while [ "$#" -gt 0 ]; do
         --data) data=$2 ;;
         --image) image=$2; explicit_image=yes ;;
         --gpu) gpu=$2 ;;
+        --model-profile) model_profile=$2 ;;
+        --isolation) isolation=$2 ;;
         --common-package) package=$2 ;;
         --cache) cache=$2 ;;
         --assets-cache) assets_cache=$2 ;;
@@ -56,6 +63,8 @@ while [ "$#" -gt 0 ]; do
     esac
     shift 2
 done
+case "$model_profile" in gpt-6.1-sol|nemotron-3.5-super-vl|nemotron-3.5-super-vl-nim) ;; *) fail 'Unknown model profile' ;; esac
+case "$isolation" in trusted|strict) ;; *) fail 'Unknown isolation mode' ;; esac
 if [ "$environment" = behavior1k ]; then
     [ -n "$data" ] || fail 'BEHAVIOR requires --data with the official user-supplied data and key'
 fi
@@ -104,17 +113,21 @@ if [ "$prepare" = yes ]; then
     if [ -n "$assets_cache" ]; then
         case "$actual_credentials" in "$assets_cache/"*) fail 'Keep model credentials outside the asset cache' ;; esac
     fi
-    image=$(sh "$root/portable/prepare.sh" "$root" "$gpu" "$cache" "$package" "$accept" "$assets_cache" "$environment")
+    image=$(sh "$root/portable/prepare.sh" "$root" "$gpu" "$cache" "$package" "$accept" "$assets_cache" "$environment" "$isolation")
 fi
 case "$image" in ''|-*) fail 'Invalid image reference' ;; esac
 if ! docker image inspect "$image" >/dev/null 2>&1; then
     docker pull "$image"
 fi
 identity=$(docker image inspect "$image" --format '{{.Id}}')
+if [ "$isolation" = strict ]; then
+    [ "$(docker image inspect "$identity" --format '{{index .Config.Labels "com.nvidia.nanoverse-gym.isolation"}}')" = strict ] || fail 'Strict isolation requires a prepared strict image'
+fi
 umask 077
 mkdir -- "$output" || fail 'Refusing to reuse the output directory'
 lease=$(mktemp "$output/.launch.XXXXXX")
 container=nvgym-$(basename -- "$lease")
+network=
 printf '%s\n' "$container" > "$output/container-name"
 cleanup() {
     status=$?
@@ -140,17 +153,45 @@ cleanup() {
             status=1
         fi
     fi
+    if [ -n "$network" ]; then
+        if attributes=$(docker network inspect --format '{{.Id}} {{index .Labels "com.nvidia.nanoverse-gym.run"}}' "$network" 2>/dev/null); then
+            network_id=${attributes%% *}
+            owner=${attributes#* }
+            if [ "$owner" = "$container" ] && docker network rm "$network_id" >/dev/null 2>&1; then
+                printf '%s\n' '{"network_removed":true}' > "$output/docker-network-cleanup.json"
+            else
+                printf '%s\n' '{"network_removed":false,"error":"Network owner mismatch or removal failed"}' > "$output/docker-network-cleanup.json"
+                status=1
+            fi
+        else
+            printf '%s\n' '{"network_removed":null,"error":"Network inspection failed"}' > "$output/docker-network-cleanup.json"
+            status=1
+        fi
+    fi
     exit "$status"
 }
 trap cleanup EXIT
 trap 'exit 129' HUP
 trap 'exit 130' INT
 trap 'exit 143' TERM
-set -- "$identity" "$environment"
+network=$container-net
+network_id=$(docker network create --driver bridge \
+    --label "com.nvidia.nanoverse-gym.run=$container" \
+    --label com.nvidia.nanoverse-gym.service=local-evaluation "$network")
+printf '%s\n' "$network_id" > "$output/network-id"
+set -- "$identity" "$environment" --model-profile "$model_profile"
 if [ -n "$data" ]; then
-    set -- --mount "type=bind,source=$data,target=/data,readonly" "$identity" "$environment" --data-root /data
+    set -- --mount "type=bind,source=$data,target=/data,readonly" "$identity" "$environment" --model-profile "$model_profile" --data-root /data
+fi
+if [ "$isolation" = strict ]; then
+    set -- --tmpfs /tmp:rw,exec,nosuid,nodev,size=8g,mode=1777 \
+        --security-opt "seccomp=$root/portable/security/ttc-seccomp.json" "$@"
+    case "$(docker info --format '{{json .SecurityOptions}}')" in
+        *apparmor*) set -- --security-opt apparmor=nanoverse-gym-ttc "$@" ;;
+    esac
 fi
 docker create --name "$container" --cidfile "$output/container-id" \
+    --network "$network_id" \
     --init --gpus "device=$gpu" --cpus 12 --memory 64g --pids-limit 4096 \
     --shm-size 2g --log-driver local --log-opt max-size=10m --log-opt max-file=2 \
     --label com.nvidia.nanoverse-gym.service=local-evaluation \
